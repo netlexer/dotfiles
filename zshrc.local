@@ -1,0 +1,114 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory beep nomatch
+unsetopt autocd
+setopt no_auto_remove_slash
+# be more like bash with completion.
+setopt bashautolist # nolistambiguous
+
+bindkey -e
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle :compinstall filename '/home/neil/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+# bind F12 to key sequence which replaces previous cmd w/ "t" (=less)
+bindkey -s '\e[24~' '^a\edt^e^m'
+bindkey -s '\C-x\C-y' " \C-usync; sync; sync\C-m"
+
+# settings for pgup/pgdown keys 
+bindkey "$(echotc kP)" up-line-or-history
+bindkey "$(echotc kN)" down-line-or-history
+
+unset LESS_TERMCAP_md LESS_TERMCAP_us
+
+# use 256 colours in some terms
+case "$TERM" in
+       xterm*) TERM=xterm-256color ;;
+       screen*) TERM=screen-256color ;;
+esac
+
+# zsh package manager
+source ~/etc/zsh/antigen.zsh
+
+#source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
+
+
+# function definitions
+
+manzsh()  { /usr/bin/man zshall |  most +/"$1" ; }
+
+d () 
+{ 
+    CONF="/etc/dict/colorit.conf";
+    if [ -e $CONF ]; then
+        /usr/bin/dict "$@" | colorit -c $CONF | less -R -+c -F -X;
+    else
+        /usr/bin/dict "$@" | less -R -+c -F -X;
+    fi
+}
+
+
+gg () 
+{ 
+    SURFRAW_google_safe="off";
+    /usr/lib/surfraw/google "$@" &> /dev/null
+}
+
+urxvtfont ()
+{
+    local arg1="$1"
+    if [ -z "$arg1" ]; then
+#        arg1="xft:Liberation Mono:size=10"      # neat monospace font
+	arg1="xft:Inconsolata:Regular:size=12"   # better terminal font 
+    fi
+    printf '\e]710;%s\007' "$arg1"
+}
+
+## List all occurrences of programm in current PATH
+plap() {
+    emulate -L zsh
+    if [[ $# = 0 ]] ; then
+        echo "Usage:    $0 program"
+        echo "Example:  $0 zsh"
+        echo "Lists all occurrences of program in the current PATH."
+    else
+        ls -l ${^path}/*$1*(*N)
+    fi
+}
+
+alias fip='plap'
+
+# additional aliases
+
+alias ct='colortail -f '
+alias ddf='pydf -h'
+alias df='df -h '
+alias diff='colordiff -u'
+alias du='du -h '
+alias e='emacsclient -n -c -a jmacs '
+alias grep='command grep --color=auto --directories=skip'
+alias h='history -100'
+alias j='jmacs '
+alias lf='command ls -A  --color=auto'
+alias l='command ls -lh  --color=auto'
+alias ll='command ls -lA  --color=auto'
+alias llt='command ls -lAtcrh  --color=auto'
+alias loc='/usr/bin/locate'
+alias lt='command ls -ltr  --color=auto'
+alias m='man'
+alias mail='LESS=-FRSXei command mail'
+alias mi='mediainfo'
+alias t='less'
+alias ze='jmacs -syntax sh ~/.zshrc.local'
+

@@ -1,0 +1,170 @@
+# $Id: .inputrc,v 3.1 2012/05/11 06:05:56 neil Exp neil $
+
+### GLOBAL VARIABLES ###
+
+# do not bell on tab-completion
+set bell-style none
+
+# Be 8 bit clean -- (this also involves using "stty cs8 -istrip -parenb",
+# which are usually the defaults in Debian. See the Bash.FAQ for more info. 
+
+set input-meta on
+set output-meta on
+# set meta-flag on
+
+# This needs to be set explicitly: "upgrade" in bash (v 3.1). Default is On.
+# Set this to OFF to display UTF-8 (or 'locale' setting) characters in bash.
+set convert-meta on
+
+# visible-stats = pressing TAB reveals file-type (like ls -F).
+# expand-tilde = press TAB converts ~/ to /home/neil/ (for example).
+set visible-stats on
+set expand-tilde on
+set mark-directories on
+
+# See /usr/share/doc/bash/README.Debian.gz
+set mark-symlinked-directories on
+
+# like ls -x if on (default = off, I think)
+set print-completions-horizontally off
+# Set this later, maybe?
+#set show-all-if-ambiguous on
+
+#############################################################################
+# Bind menu-complete to M-SPC, complementing other completion functions, ie:
+#	TAB		   : complete
+#	M-? (=Alt-Shift-/) : possible-completions
+# 	M-ESC (=Esc-Esc)   : ditto 
+# 	M-* (=Alt-Shift-8) : insert-completions
+#	
+# (Note: Just define this when using application "Bash" at the mo')
+# menu-complete will cycle thru' the completions...
+#############################################################################
+
+### MACRO DEFINITIONS ###
+#
+# Macros convenient for shell interaction
+#
+$if Bash
+
+"\C-x\C-r":     re-read-init-file
+
+# bind possible-completions to M-\ as well (as M-? and M-ESC --> see above)
+"\M-\\":	possible-completions
+
+# esc-space (and Meta-SPC?) goes thru' each completion in turn...
+"\e ":		menu-complete
+# "\M-SPC":	menu-complete
+
+# Magic-space, as in tcsh 
+" "		magic-space
+
+# Add another def here? (done: added M-a (C-a conflicts with screen)
+"\C-x\C-a":	alias-expand-line
+"\M-a":		alias-expand-line
+
+# In emacs, C-u is bound to "universal-argument"; set M-u for this...
+"\M-u":		universal-argument
+"\C-u":		unix-line-discard
+
+# edit the path
+"\C-xp":	"PATH=${PATH}\e\C-e\C-a\ef\C-f"
+
+# prepare to type a quoted word -- insert open and close double quotes
+# and move to just after the open quote
+"\C-x\"":	"\"\"\C-b"
+
+# insert a backslash (testing backslash escapes in sequences and macros)
+"\C-x\\":	"\\"
+
+# Quote the current or previous word
+"\C-xq":	"\eb\"\ef\""
+
+# Add a binding to refresh the line, which is unbound
+"\C-xr":	redraw-current-line
+
+# Edit variable on current line.
+"\M-\C-v":	"\C-a\C-k$\C-y\M-\C-e\C-a\C-y="
+
+# Pressing Ctrl-xs wraps the commandline around "su -c"
+"\C-xs":	"\C-e\"\C-asu -c \""
+
+# Ctrl-xx puts a "$()" around the previous command, leaving cursor at BOL
+"\C-xx":	"\C-p)\C-a $(\C-a"
+
+# Ctrl-x\Ctrl-x: the same as above, but affects current command line (no ^P)
+"\C-x\C-x":	")\C-a $(\C-a"
+
+# Ctrl-x\Ctrl-t will insert "t" (=less), replacing the first word on a line.
+"\C-x\C-t":	"\C-a\M-dt\C-e"
+
+# This does the same (bound to F12), and executes it too!
+"\e[24~":	"\C-a\M-dt\C-e\C-m"
+
+# Same as above, but uses l [alias 'ls -lF'] (bound to F11). *New*
+"\e[23~":	"\C-a\M-dl\C-e\C-m"
+
+# Type a command, and use the output of the last program as input
+# (+magic_space) - bound to Del (Fn + ` on HHKB)
+"\e[3~":        " `!!` "
+
+###
+# new: bind F1 to alias-complete-line,eol,complete -- so that (eg)
+# pressing "m timi<F1>" will expand to "man timidity" (m is alias for man)
+"\M-OP":	"\M-a\C-e\C-i"
+
+
+# F5 - does much the same, prepending the line with 'file'
+"\e[15~":	"\C-a\M-dfile\C-e\C-m"
+
+# F6 - type a few characters, then press F6: Magick! performs an 
+# "insert-completions" (M-*) command,  with 'man' (but no RET key)
+"\e[17~":	"\e*\C-aman \C-e"
+
+# F7 - prepends 'l' (an alias ), SPC, then backquotes the rest of the line, 
+# but with the word `which' in front; then does a shell-expand-line (!)
+"\e[18~":	"\C-al `which \C-e`\e\C-e"
+
+# F8 - similar to F7: type a few characters of a command and press F8 - which
+# will do an 'insert-completions', then follow F7's lead...
+"\e[19~":	"\e*\C-al `which \C-e`\e\C-e"
+
+# F9 - just prints a space and `!!` (history for last-command), a newline.
+# (commented - See above)
+#"\e[20~":	" `!!`\C-m"
+
+#####
+
+# Key C-x\C-y   - mapped to clear-line & sync...
+"\C-x\C-y":		" \C-usync; sync; sync\C-m"
+
+
+# PgUp / PgDn (taken from ~/.tcshrc)
+#
+"\e[5~":		 	history-search-backward
+"\e[6~":		 	history-search-forward
+
+# F8 : search in history backwards for line beginning as current.
+"\e[19~":		
+
+
+$endif
+## (i.e. $endif bash) ##
+
+## Next bit extracted from Inputrc included with pari-gp distribution...
+
+"\C-h": backward-delete-char
+"\e\C-h": backward-kill-word
+"\C-xd": dump-functions
+
+$if Pari-GP
+  set convert-meta on
+  set output-meta off
+  set show-all-if-ambiguous
+  set blink-matching-paren on
+# toggle between normal-mode (electric parentheses) and copy-paste mode
+  "\C-q": "\M--2("
+$endif
+
+
+## Eof (~/.inputrc)

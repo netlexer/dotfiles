@@ -1,0 +1,104 @@
+!-------------------------------------------------------------------------------
+! Xft settings
+!-------------------------------------------------------------------------------
+
+Xft.dpi: 		    96
+Xft.antialias: 		    true
+Xft.hinting: 		    true
+Xft.rgba: 		    rgb
+Xft.autohint: 		    false
+Xft.hintstyle: 		    hintslight
+Xft.lcdfilter: 		    lcddefault
+
+!Xft.rgba:                   none
+!Xft.hintstyle:              hintfull
+
+!-------------------------------------------------------------------------------
+! URxvt settings
+! Colours lifted from Solarized (http://ethanschoonover.com/solarized)
+! More info at:
+! http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod
+!-------------------------------------------------------------------------------
+
+!URxvt.depth:                32
+URxvt.geometry:             80x40
+URxvt.transparent:          true
+URxvt*.shading:		    25
+!URxvt.fading:               0
+URxvt.urgentOnBell:         true
+URxvt.visualBell:           true
+URxvt.loginShell:           true
+URxvt.saveLines:            8192
+URxvt.mapAlert:             true
+URxvt.internalBorder:       3
+URxvt.lineSpace:            0
+
+! Fonts
+!URxvt.allow_bold:           true
+URxvt*font: 		    xft:Inconsolata:Regular:size=12, xft:PowerlineSymbols, xft:Code2000, 9x15
+URxvt*boldFont: 	    xft:Inconsolata:Bold:size=12
+URxvt*italicFont: 	    xft:Liberation Mono:italic:size=10:autohint=true
+
+! Fix font space
+URxvt*letterSpace: -1
+
+! Scrollbar
+URxvt.scrollStyle:          plain
+URxvt.scrollBar:            false
+!URxvt.secondaryScroll:      true
+
+
+! Perl extensions
+!URxvt.perl-ext-common:      default,matcher,-selection
+!URxvt.matcher.button:       1
+!URxvt.urlLauncher:          firefox
+
+!URxvt.keysym.C-Delete:    matcher:last
+!URxvt.keysym.M-Delete:    matcher:list
+!URxvt.keysym.0xff67:      matcher:select
+
+! Cursor
+!URxvt.cursorBlink:          true
+URxvt.cursorColor:          #87ff00
+URxvt.cursorUnderline:      false
+
+! Pointer
+URxvt.pointerBlank:         true
+
+
+!urxvt color scheme:
+
+!URxvt*background: #2B2B2B
+URxvt*background: #000000
+URxvt*foreground: #DEDEDE
+
+URxvt*colorBD: #fdf6e3
+URxvt*colorUL: #86a2b0
+URxvt*colorIT: #8AE234
+!URxvt.underlineColor:   yellow
+
+! black
+!URxvt*color0  : #2E3436
+URxvt*color8  : #555753
+! red
+URxvt*color1  : #CC0000
+URxvt*color9  : #EF2929
+! green
+URxvt*color2  : #4E9A06
+URxvt*color10 : #8AE234
+! yellow
+URxvt*color3  : #C4A000
+URxvt*color11 : #FCE94F
+! blue
+URxvt*color4  : #3465A4
+URxvt*color12 : #729FCF
+! magenta
+URxvt*color5  : #75507B
+URxvt*color13 : #AD7FA8
+! cyan
+URxvt*color6  : #06989A
+URxvt*color14 : #34E2E2
+! white
+URxvt*color7  : #D3D7CF
+URxvt*color15 : #EEEEEC
+
