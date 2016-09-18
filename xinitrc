@@ -59,22 +59,44 @@ ulimit -c unlimited
 #echo ">>>>>> Starting at $(date)" >> ~/.i3/i3.log
 #exec /usr/bin/i3 -V  >> ~/.i3/i3.log
 
-# Start window manager (with default session = i3) 
-SESSION=${1:-i3} 
-# WM is usually the same as the command to start it, but not always,
-# and may include args.
-case $SESSION in
-    awesome		) WM=awesome;;
-    i3			) WM="i3 -V";;
-    notion		) WM=notion;;
-    pekwm		) WM=pekwm;;
-    ratpoison		) WM=ratpoison;;
-    spectrwm		) WM=spectrwm;;
-    *)			) WM=$1;;
+# Start window manager like this, e.g.:
+# % WM=awesome startx
+# if WM isn't defined, default to i3.
+WM=${WM?:-"i3"} 
+
+logmsg () 
+{
+	echo ">>>>>> Starting $WM on $(date)" >> "$HOME/.log/${WM}.log"
+}
+	
+case $WM in
+    awesome	)
+    		logmsg
+    		exec /usr/bin/awesome >> $HOME/.log/${WM}.log
+    		;;
+    i3		)
+    		logmsg
+    		exec /usr/bin/i3 -V >> $HOME/.log/${WM}.log
+    		;;
+    notion	)
+    		logmsg
+    		exec /usr/bin/notion >> $HOME/.log/${WM}.log
+    		;;
+    pekwm	)
+    		logmsg
+    		exec /usr/bin/pekwm >> $HOME/.log/${WM}.log
+    		;;
+    ratpoison	)
+    		logmsg
+    		exec /usr/bin/ratpoison >> $HOME/.log/${WM}.log
+    		;;
+    spectrwm	)
+    		logmsg
+    		exec /usr/bin/specttrwm >> $HOME/.log/${WM}.log
+    		;;
+    *)		)
+    		echo "Unrecognised WM $WM - defaulting to i3"
+    		logmsg
+    		exec /usr/bin/i3 -V >> $HOME/.log/${WM}.log
+    		;;
 esac
-
-# Start the window manager and log to file
-echo ">>>>>> Starting $WM on $(date)" >> ~/.log/${SESSION}.log
-exec $WM  >> ~/.log/${SESSION}.log
-
-    
