@@ -56,5 +56,25 @@ xsetroot -solid "#333333"
 ulimit -c unlimited
 
 # Start i3 and log to file
-echo ">>>>>> Starting at $(date)" >> ~/.i3/i3.log
-exec /usr/bin/i3 -V  >> ~/.i3/i3.log
+#echo ">>>>>> Starting at $(date)" >> ~/.i3/i3.log
+#exec /usr/bin/i3 -V  >> ~/.i3/i3.log
+
+# Start window manager (with default session = i3) 
+SESSION=${1:-i3} 
+# WM is usually the same as the command to start it, but not always,
+# and may include args.
+case $SESSION in
+    awesome		) WM=awesome;;
+    i3			) WM="i3 -V";;
+    notion		) WM=notion;;
+    pekwm		) WM=pekwm;;
+    ratpoison		) WM=ratpoison;;
+    spectrwm		) WM=spectrwm;;
+    *)			) WM=$1;;
+esac
+
+# Start the window manager and log to file
+echo ">>>>>> Starting $WM on $(date)" >> ~/.log/${SESSION}.log
+exec $WM  >> ~/.log/${SESSION}.log
+
+    

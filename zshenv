@@ -6,6 +6,7 @@ export IRCNICK=daedalux
 export LC_COLLATE=C
 export LESS='-eisMR'
 export MAILPATH='/home/neil/Mail/inbox:/var/mail/neil'
+export MANWIDTH=80
 export NNTPSERVER=news.eternal-september.org
 export QUOTING_STYLE=literal
 # use this if starting ssh-agent from systemd --user
