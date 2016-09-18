@@ -62,7 +62,7 @@ ulimit -c unlimited
 # Start window manager like this, e.g.:
 # % WM=awesome startx
 # if WM isn't defined, default to i3.
-WM=${WM?:-"i3"} 
+#WM=${WM?:-"i3"} 
 
 logmsg () 
 {
@@ -94,9 +94,9 @@ case $WM in
     		logmsg
     		exec /usr/bin/specttrwm >> $HOME/.log/${WM}.log
     		;;
-    *)		)
+    *		)
     		echo "Unrecognised WM $WM - defaulting to i3"
     		logmsg
-    		exec /usr/bin/i3 -V >> $HOME/.log/${WM}.log
+    		exec /usr/bin/i3 -V >> $HOME/.log/i3.log
     		;;
 esac
