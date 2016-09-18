@@ -26,9 +26,14 @@ compinit
 bindkey -s '\e[24~' '^a\edt^e^m'
 bindkey -s '\C-x\C-y' " \C-usync; sync; sync\C-m"
 
-# settings for pgup/pgdown keys 
-bindkey "$(echotc kP)" up-line-or-history
-bindkey "$(echotc kN)" down-line-or-history
+# settings for up/down arrow keys
+bindkey "$(echotc ku)" up-line-or-history
+bindkey "$(echotc kd)" down-line-or-history
+# pgup/pgdn keys on keypad 
+if [[ "${TERM}" == (urxvt*|screen*) ]] ; then
+    bindkey "$(echoti ka3)" up-line-or-search
+    bindkey "$(echoti kc3)" down-line-or-search
+fi
 
 unset LESS_TERMCAP_md LESS_TERMCAP_us
 
@@ -38,15 +43,15 @@ case "$TERM" in
        screen*) TERM=screen-256color ;;
 esac
 
-# zsh package manager
+# zsh package management
 source ~/etc/zsh/antigen.zsh
-
+# I use the grml prompt, so comment for now
 #source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
 
 
-# function definitions
+# useful function definitions
 
-manzsh()  { /usr/bin/man zshall |  most +/"$1" ; }
+manzsh()  { /usr/bin/man zshall |  most -c +/"$1" ; }
 
 d () 
 { 
@@ -58,7 +63,7 @@ d ()
     fi
 }
 
-
+# this uses links browser for quick lookups in the cli
 gg () 
 { 
     SURFRAW_google_safe="off";
@@ -69,7 +74,7 @@ urxvtfont ()
 {
     local arg1="$1"
     if [ -z "$arg1" ]; then
-#        arg1="xft:Liberation Mono:size=10"      # neat monospace font
+#       arg1="xft:Liberation Mono:size=10"      # nice monospace font
 	arg1="xft:Inconsolata:Regular:size=12"   # better terminal font 
     fi
     printf '\e]710;%s\007' "$arg1"

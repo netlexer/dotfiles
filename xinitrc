@@ -55,6 +55,6 @@ xsetroot -solid "#333333"
 # Enable core dumps in case something goes wrong
 ulimit -c unlimited
 
-# Start i3 and log to ~/.i3/logfile
+# Start i3 and log to file
 echo ">>>>>> Starting at $(date)" >> ~/.i3/i3.log
 exec /usr/bin/i3 -V  >> ~/.i3/i3.log

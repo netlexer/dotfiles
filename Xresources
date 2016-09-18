@@ -35,7 +35,7 @@ URxvt.lineSpace:            0
 
 ! Fonts
 !URxvt.allow_bold:           true
-URxvt*font: 		    xft:Inconsolata:Regular:size=12, xft:PowerlineSymbols, xft:Code2000, 9x15
+URxvt*font: 		    xft:Inconsolata:Regular:size=12, 9x15, xft:Code2000
 URxvt*boldFont: 	    xft:Inconsolata:Bold:size=12
 URxvt*italicFont: 	    xft:Liberation Mono:italic:size=10:autohint=true
 
