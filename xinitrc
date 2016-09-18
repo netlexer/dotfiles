@@ -44,6 +44,7 @@ xrandr --output LVDS --brightness 1.2
 unset LC_ALL
 export LANG=en_GB.UTF-8
 export LC_MESSAGES=C
+export XAUTHORITY=/home/neil/.Xauthority
 
 # Use XToolkit in java applications
 export AWT_TOOLKIT=XToolkit
@@ -78,24 +79,17 @@ case $WM in
     		logmsg
     		exec /usr/bin/i3 -V >> $HOME/.log/${WM}.log
     		;;
-    notion	)
-    		logmsg
-    		exec /usr/bin/notion >> $HOME/.log/${WM}.log
-    		;;
-    pekwm	)
-    		logmsg
-    		exec /usr/bin/pekwm >> $HOME/.log/${WM}.log
-    		;;
     ratpoison	)
     		logmsg
     		exec /usr/bin/ratpoison >> $HOME/.log/${WM}.log
     		;;
     spectrwm	)
     		logmsg
-    		exec /usr/bin/specttrwm >> $HOME/.log/${WM}.log
+    		exec /usr/bin/spectrwm >> $HOME/.log/${WM}.log
     		;;
     *		)
     		echo "Unrecognised WM $WM - defaulting to i3"
+    		WM="i3"
     		logmsg
     		exec /usr/bin/i3 -V >> $HOME/.log/i3.log
     		;;
