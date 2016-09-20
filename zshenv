@@ -1,4 +1,7 @@
 # export QT_SELECT=4
+export AURDEST=/home/neil/arch/builds
+export BUILDDIR=/home/neil/arch/builds
+export CCACHE_PATH=/usr/bin
 export EDITOR=jmacs
 export HISTCONTROL=ignoreboth
 export HISTFILE HISTSIZE SAVEHIST
@@ -6,7 +9,7 @@ export IRCNICK=daedalux
 export LC_COLLATE=C
 export LESS='-eisMR'
 export MAILPATH='/home/neil/Mail/inbox:/var/mail/neil'
-export MANWIDTH=80
+#export MANWIDTH=80
 export NNTPSERVER=news.eternal-september.org
 export QUOTING_STYLE=literal
 # use this if starting ssh-agent from systemd --user

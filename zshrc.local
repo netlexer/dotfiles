@@ -30,10 +30,8 @@ bindkey -s '\C-x\C-y' " \C-usync; sync; sync\C-m"
 bindkey "$(echotc ku)" up-line-or-history
 bindkey "$(echotc kd)" down-line-or-history
 # pgup/pgdn keys on keypad 
-if [[ "${TERM}" == (urxvt*) ]] ; then
-    bindkey "$(echoti ka3)" up-line-or-search
-    bindkey "$(echoti kc3)" down-line-or-search
-fi
+bindkey "^[Oy" up-line-or-search
+bindkey "^[Os" down-line-or-search
 
 unset LESS_TERMCAP_md LESS_TERMCAP_us
 
