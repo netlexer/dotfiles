@@ -3,7 +3,7 @@ export AURDEST=/home/neil/arch/builds
 export BUILDDIR=/home/neil/arch/builds
 export SRCDEST=/home/neil/arch/sources
 export CCACHE_PATH=/usr/bin
-export EDITOR='emacsclient -c -n '
+export EDITOR='emacsclient -c '
 export HISTCONTROL=ignoreboth
 export HISTFILE HISTSIZE SAVEHIST
 export IRCNICK=daedalux
