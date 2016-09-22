@@ -1,7 +1,7 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;; $Id: .emacs,v 4.20 2006/02/14 05:13:31 neil Exp neil $
 ;;;
-;;; Time-stamp: <2016-09-06 21:23:46 neil>
+;;; Time-stamp: <2016-09-22 14:51:12 neil>
 ;;;
 ;;; Emacs configuration file for Neil Woods <cnw@altern.org>
 ;;; This includes customisations collected from many sources.
@@ -883,6 +883,10 @@ by typing \\[beginning-of-line] \\[delete-line]."
      (:name "unread" :query "tag:unread")
      (:name "bandcamp" :query "from:*.bandcamp")
      (:name "KeranM" :query "karmorg1991@gmail.com"))))
+ '(package-check-signature nil)
+ '(package-selected-packages
+   (quote
+    (yaml-mode smart-mode-line-powerline-theme ox-nikola js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme color-theme-solarized color-theme-sanityinc-solarized color-theme-modern color-theme-gruber-darker cl-generic)))
  '(send-mail-function (quote sendmail-send-it))
  '(starttls-extra-arguments nil)
  '(tool-bar-mode nil))

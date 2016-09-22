@@ -1,14 +1,15 @@
 # export QT_SELECT=4
 export AURDEST=/home/neil/arch/builds
 export BUILDDIR=/home/neil/arch/builds
+export SRCDEST=/home/neil/arch/sources
 export CCACHE_PATH=/usr/bin
-export EDITOR=jmacs
+export EDITOR='emacsclient -c -n '
 export HISTCONTROL=ignoreboth
 export HISTFILE HISTSIZE SAVEHIST
 export IRCNICK=daedalux
 export LC_COLLATE=C
-export LESS='-eisMR'
-export MAILPATH='/home/neil/Mail/inbox:/var/mail/neil'
+export LESS='-eaisMR'
+export MAILPATH='/home/neil/Mail/mbox:/var/mail/neil'
 #export MANWIDTH=80
 export NNTPSERVER=news.eternal-september.org
 export QUOTING_STYLE=literal

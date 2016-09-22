@@ -157,6 +157,11 @@ bar {
 #	font pango:Monospace, Icons 8
 }
 
+# for quick mail windows, pop-ups, etc.
+for_window [class="URxvt" instance="muttterm"] floating enable
+for_window [class="XOsview" instance="xosview"] floating enable
+for_window [class="Pavucontrol"] floating enable, border normal
+for_window [class="Gucharmap"] floating enable, border normal
 
-#exec /usr/bin/compton --no-fading-openclose
+for_window [window_role="pop-up"] floating enable
 

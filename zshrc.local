@@ -1,12 +1,12 @@
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=2000
+SAVEHIST=2000
 setopt appendhistory beep nomatch
 unsetopt autocd
 setopt no_auto_remove_slash
 # be more like bash with completion.
-setopt bashautolist # nolistambiguous
+#setopt bashautolist # nolistambiguous
 
 bindkey -e
 # End of lines configured by zsh-newuser-install
@@ -112,6 +112,8 @@ alias lt='command ls -ltr  --color=auto'
 alias m='man'
 alias mail='LESS=-FRSXei command mail'
 alias mi='mediainfo'
-alias t='less'
+alias pacs='pacaur -Ss'
+alias paci='pacaur -Si'
+alias t='command less '
 alias ze='jmacs -syntax sh ~/.zshrc.local'
 
