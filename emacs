@@ -1,18 +1,12 @@
 ;;; -*- Mode: Emacs-Lisp -*-
-;;; $Id: .emacs,v 4.20 2006/02/14 05:13:31 neil Exp neil $
 ;;;
-;;; Time-stamp: <2016-09-22 14:51:12 neil>
+;;; Time-stamp: <2016-09-22 20:29:12 neil>
 ;;;
-;;; Emacs configuration file for Neil Woods <cnw@altern.org>
-;;; This includes customisations collected from many sources.
-;;; This is a major re-vamp, to accomodate co-existence of both
-;;; GNU Emacs and XEmacs. (partially complete). See ChangeLog.
-;;; 16 Sep 03 - Revert back to using ~/.emacs as init file, with
-;;; cusomizations (using custom) written to this file (at end).
-;;;
-;;; Written primarily for GNU Emacs (currently ver 21.4), with
-;;; modifications for emacs-snapshot (or emacs-22 as it is now). 
-;;; Neil Woods (c) 1992-2012.
+;;; Emacs configuration file for Neil Woods <neil@netlexer.uk>.
+;;; Includes customisations collected from many sources.  Written
+;;; primarily for GNU Emacs (originally ver 19.x), with many
+;;; modifications along the way. Needs a good cleanup/rewrite.
+;;; Neil Woods (c) 1992-2016.
 
 ;; Announce start of file loading...
 (message "Loading Emacs personal init file...")
