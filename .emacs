@@ -1,6 +1,6 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-09-23 13:17:11 neil>
+;;; Time-stamp: <2016-09-23 16:48:04 neil>
 ;;;
 ;;; Emacs configuration file for Neil Woods <neil@netlexer.uk>.
 ;;; Includes customisations collected from many sources.  Written
@@ -198,50 +198,11 @@
 
  (global-set-key [(alt ?i)] 'iconify-frame)   ; Alt-i
 
- ;; Define the defaults in X (See also below: font-lock,etc)
- ;; The file ~/.Xdefaults defines X resources for the initial frame.
- ;; The variable initial-frame-alist should match this. The variable
- ;; default-frame-alist defines subsequent frames.
-
- ;; Place the initial frame (Now use X resources for this.)
- ;; (setq initial-frame-alist
- ;;      '((width . 90) (height . 34)))
-
- ;; (setq default-frame-alist
- ;;       '((width . 80) (height . 30)
- ;; 	 (cursor-type . box)
- ;; 	 (foreground-color . "white")
- ;; 	 (background-color . "black")))
-
- ;; Special frames: for buffers matching one of the regexps in
- ;; special-display-regexps (can be help/completion, etc, buffers)
- ;; Also special-display-buffer-names may be used as well/instead of.
- ;; set a smaller font for the display of certain buffers...?
- ;;(font . "-misc-fixed-medium-r-normal--13-120-75-75-c-70-iso8859-1")
- (setq special-display-frame-alist
-       '((width . 80)
-	 (height . 30)                  ;; the default, anyway.
-	 (unsplittable t) ))
-
- ;; Set a special frame for *Info*/*w3m* buffers (useful in Gnus for clicking
- ;; on links. Note: I also had to change same-window-regexps to NOT
- ;; include *info* - I used customize for this.
- (setq special-display-buffer-names (list "*info*" "*w3m*"))
-
- (setq same-window-buffer-names
-       (remove "*info*" same-window-buffer-names))
-
  ;; Set the text for titlebar and icons - Icon only needs name of buffer -
  ;; the icon graphic xbm will, of course, indicate it's GNU Emacs.
  (setq frame-title-format '("emacs@" system-name " [%b]" ))
  (setq icon-title-format '("[%b]"))
 
- ;; changes colour of lisp parens to dim-gray (by default).
- ;;(load "parenface")
-
- ;; (set-face-font 'modeline "neep-iso8859-15-14") ; use terminus (see ~/.Xdefaults)
- ;; (set-face-background 'modeline "grey")     ; the defaults
- ;; (set-face-foreground 'modeline "black")
  ;; these look pretty cool... (see also ~/.Xdefaults)
  ;;(set-face-background 'modeline "midnightblue")
  ;;(set-face-foreground 'modeline "goldenrod2")
@@ -262,11 +223,6 @@
 
 (setq global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
-
-;(setq font-lock-support-mode 'fast-lock-mode)
-;;(setq fast-lock-cache-directories
-;;      (list (concat my-emacs-dir "fastlock")))
-
 (require 'highline)           ;; used by (at least) mldonkey, gnus.
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -318,24 +274,19 @@
       (regexp-opt '("cnw@pobox.com"
 		    "cnw+usenet@pobox.com"
 		    "cnw+gmane@pobox.com"
-		    "cnw+amazon@pobox.com"
-		    "nwoods@pobox.com"
-		    "nw@immermail.com"
-		    "neil@phasmic.org"
-		    "neil@phasm.ukfsn.org"
 		    "egregore@riseup.net"
-		    "phasm@fea.st")))
+		    "neil@netlexer.uk"
+		    "arch@netlexer.uk")))
 ;;cycling while completing email addresses
 (setq bbdb-complete-name-allow-cycling t)
 
 ;; handy completions
-;; (define-key message-minibuffer-local-map (kbd "<tab>") 'bbdb-complete-name)
+;(define-key message-minibuffer-local-map (kbd "<tab>") 'bbdb-complete-name)
 
 ;;Popup-buffers
 (setq bbdb-use-pop-up t)
 
 (bbdb-initialize 'gnus 'message)
-;;(bbdb-initialize 'message)
 ;(setq bbdb-send-mail-style 'message) ;; this is normally nil - meaning guess
 
 (autoload 'notmuch "notmuch" "Notmuch mail" t)
@@ -371,24 +322,16 @@
 (define-key flyspell-mode-map (kbd "M-.") 'ispell-word)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; W3m -- Read URL's with w3m
+;; WWW -- Read URL's with specified browser
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;(require 'w3m-load)
-;;(setq browse-url-browser-function 'w3m-browse-url)
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/usr/bin/xlinks2")
+      browse-url-generic-program "/usr/bin/uzbl")
 
 (global-set-key "\C-xm" 'browse-url-at-point)
 
 ;; super-click-button-1 (Windows key + click btn 1 )  
 (global-set-key [s-mouse-1] 'browse-url-at-mouse)
-
-
-;; cookies are disabled by default in emacs-w3m. useful for pobox.com.
-(setq w3m-use-cookies t)
-(setq w3m-cookie-accept-bad-cookies t)
-
 
 ;; turn on ffap (emacs-goodies) (best loaded after browse-url or w3)(drazi)
 (ffap-bindings)
@@ -424,9 +367,9 @@
 (global-set-key [S-iso-lefttab] 'dabbrev-completion)
 
 ;; Enables completion of recently used words (bound to M-RET & C-RET)
-;(require 'completion)
-;(dynamic-completion-mode)
-;(initialize-completions)
+(require 'completion)
+(dynamic-completion-mode)
+(initialize-completions)
 
 ;; Icomplete-mode hooks - contrain minibuffer height...
 (add-hook 'icomplete-minibuffer-setup-hook
@@ -440,33 +383,25 @@
 
 ;; make backup files in ~/.backups/ rather than scattered around all
 ;; over the filesystem.
-(setq make-backup-files t)
-(setq version-control t)
-(setq kept-old-versions 2)
-(setq kept-new-versions 4)
-(setq delete-old-versions t)
-(setq backup-directory-alist '(("." . "~/.backups")))
-(setq backup-by-copying nil)
-(setq backup-by-copying-when-linked t)
+(setq make-backup-files t
+      version-control t
+      kept-old-versions 2
+      kept-new-versions 4
+      delete-old-versions t
+      backup-directory-alist '(("." . "~/.backups"))
+      backup-by-copying nil
+      backup-by-copying-when-linked t)
+
 ;; Set to t. If nil (the default) doesn't backup VC (RCS etc) files!
 (setq vc-make-backup-files t)
 
-;; remove this -- use the more standard method above...
-;; (defun make-backup-file-name (file-name)
-;;   "Create the non-numeric backup file name for `file-name'."
-;;   (require 'dired)
-;;   (if (file-exists-p "~/.backups")
-;;       (concat (expand-file-name "~/.backups/")
-;; 	      (dired-replace-in-string "/" "|" file-name))
-;;     (concat file-name "~")))
+;; disable backups for files in /tmp or in my Mail or News directories.
+(defun nw-backup-enable-predicate (filename)
+  (and (not (string= "/tmp/" (substring filename 0 5)))
+       (not (string-match "~/Mail/" filename))
+       (not (string-match "~/News/" filename))))
 
-;; ;; disable backups for files in /tmp or in my Mail or News directories.
-;; (defun nw-backup-enable-predicate (filename)
-;;   (and (not (string= "/tmp/" (substring filename 0 5)))
-;;        (not (string-match "~/Mail/" filename))
-;;        (not (string-match "~/News/" filename))))
-
-;; (setq backup-enable-predicate 'nw-backup-enable-predicate)
+(setq backup-enable-predicate 'nw-backup-enable-predicate)
 
 ;; Define function to match a parenthesis otherwise insert a % (like vi !;-P )
 
@@ -481,19 +416,19 @@
 ;; Load the auto-save.el package, which lets you put all of your autosave
 ;; files in one place, instead of scattering them around the file system.
 ;;
-(setq auto-save-directory (concat my-emacs-dir "autosave")
-      auto-save-directory-fallback auto-save-directory
-      auto-save-hash-p nil
-      efs-auto-save t
-      efs-auto-save-remotely nil
-      auto-save-list-file-name (concat my-emacs-dir "auto-save-list")
-      ;; now that we have auto-save-timeout, let's crank this up
-      ;; for better interactive response. (default value is 300).
-      ;auto-save-interval 1000
-      )
+;; (setq auto-save-directory (concat my-emacs-dir "autosave")
+;;       auto-save-directory-fallback auto-save-directory
+;;       auto-save-hash-p nil
+;;       efs-auto-save t
+;;       efs-auto-save-remotely nil
+;;       auto-save-list-file-name (concat my-emacs-dir "auto-save-list")
+;;       ;; now that we have auto-save-timeout, let's crank this up
+;;       ;; for better interactive response. (default value is 300).
+;;       ;auto-save-interval 1000
+;;       )
 ;; We load this afterwards because it checks to make sure the
 ;; auto-save-directory exists (creating it if not) when it's loaded.
-;(require 'auto-save)
+;; (require 'auto-save)
 
 ;; Query replace on region
 
@@ -586,31 +521,6 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 
-;; TODO: Need to get this...
-;;(require 'csh-mode)
-;;(setq auto-mode-alist
-;;      (append '(("\\.tcshrc$"  . csh-mode)
-;;		("\\.cshrc$"   . csh-mode)
-;;		("*.\\.csh$"   . csh-mode))
-;;	      auto-mode-alist))
-
-;;(add-hook 'csh-mode-hook 'turn-on-font-lock 'append)
-
-;; We don't need this if using daemon mode.
-;; start emacs server/emacsclient.
-
-;(setq server-use-tcp t
-;      server-socket-dir "~/.emacs.d/server")
-;  (unless (server-running-p)
-;      (server-start)))
-
-
-;; startup gnuserv/gnuclient - then I can use dtemacs as my $EDITOR
-;;(autoload 'gnuserv-start "gnuserv-compat"
-;;          "Allow this Emacs process to be a server for client processes."
-;;          t)
-;;
-;;(gnuserv-start)
 
 (add-hook 'find-file-hooks 'auto-insert)
 
@@ -647,20 +557,6 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (global-set-key "\C-ct" 'todo-show) ;; switch to TODO buffer
 (global-set-key "\C-ci" 'todo-insert-item) ;; insert new item
 
-;; planner - the Emacs Planner, can be integrated w/ Gnus (TODO: look at this)
-
-;;(planner-gnus-insinuate)
-
-;; Display time (& load) in modeline, but not timeclock.
-;; *NB* Update: commented - cnw, 26/05/13. 
-;;(setq timeclock-use-display-time 0)
-;;(timeclock-modeline-display 0)
-;;(display-time)
-
-;; load the emacs dictd client
-;(load "dictionary-init")
-
-
 ;; Mode for viewing FAQ's...
 (autoload 'faq-mode "faq-mode"
   "Major mode for reading faq files." t)
@@ -693,21 +589,13 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (add-hook 'shell-mode-hook
 	  'ansi-color-for-comint-mode-on)
 
-(setq comint-scroll-to-bottom-on-input 't)
-(setq comint-scroll-show-maximum-output 't)
-(setq comint-scroll-to-bottom-on-output 'all)
-(setq comint-input-ignoredups 't)
+(setq comint-scroll-to-bottom-on-input 't
+      comint-scroll-show-maximum-output 't
+      comint-scroll-to-bottom-on-output 'all
+      comint-input-ignoredups 't)
 
 (define-key comint-mode-map [up] 'comint-previous-input)
 (define-key comint-mode-map [down] 'comint-next-input)
-
-;; Simple keyboard macro to add shell script #! and do a string replace.
-;; Useful in rapidshare links.
-;; Named using 'name-last-kbd-macro', then saved using 'insert-kbd-macro'.
-(fset 'rapidsh
-   [escape ?< return return up up ?# ?! ?/ ?b ?i ?n ?/ ?b ?a ?s ?h return ?\M-x ?r ?e ?p ?l ?a ?c ?e ?- ?s ?t ?r ?  return ?h ?t ?t ?p return ?r ?a ?p ?i ?d ?g ?e ?t ?  ?h ?t ?t ?p return down ?\C-x ?\C-s])
-
-(global-set-key [S-f5] 'rapidsh)
 
 ;; smilies. Use F9 then a, b, c etc (more to add later...)
 ;; a = U+1F603 SMILING FACE WITH OPEN MOUTH
@@ -813,11 +701,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
 ;; Next ln equiv: ISO 2022 based 8-bit encoding for Latin-1 (MIME:ISO-8859-1)
 (set-language-environment "English")
 (setq system-time-locale "Europe/London")
-
-;(prefer-coding-system 'latin-1)
-;(prefer-coding-system 'latin-9)
 (prefer-coding-system 'utf-8)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom section (added automagically by "custom" package) ;;;;;;;;;;;;;;;
@@ -845,7 +729,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
     ("71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
  '(desktop-save-mode t)
  '(display-time-mode t)
- '(erc-server "haxan.lan")
+ '(erc-server "nova")
  '(erc-user-full-name "\"What's up doc?\"")
  '(font-use-system-font nil)
  '(foreground-color "#839496")
@@ -854,12 +738,6 @@ by typing \\[beginning-of-line] \\[delete-line]."
  '(indicate-empty-lines t)
  '(menu-bar-mode nil)
  '(mouse-autoselect-window 0.5)
- '(notmuch-saved-searches
-   (quote
-    ((:name "inbox" :query "tag:inbox")
-     (:name "unread" :query "tag:unread")
-     (:name "bandcamp" :query "from:*.bandcamp")
-     (:name "KeranM" :query "karmorg1991@gmail.com"))))
  '(package-check-signature nil)
  '(package-selected-packages
    (quote
