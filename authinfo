@@ -1,8 +1,0 @@
-machine news.individual.net login woods password ooroopiu
-machine news.eternal-september.org login phasm force yes password inisyldbx
-machine sasl.smtp.pobox.com login nwoods@pobox.com password g5VfmnzWhcYrgd port 587
-machine mail.messagingengine.com login phasm@fea.st password *u#5&r4br6%hyy port imap
-machine mail.riseup.net login egregore@riseup.net password n32udqjwg756 port imap
-machine mail.gandi.net login neil@phasmic.org password ipso-fact73 port imap
-machine mail.gandi.net login admin@ip6ix.net password 7wBAsFM5AYG7 port 587
-
