@@ -1,6 +1,6 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-09-22 20:29:12 neil>
+;;; Time-stamp: <2016-09-23 13:17:11 neil>
 ;;;
 ;;; Emacs configuration file for Neil Woods <neil@netlexer.uk>.
 ;;; Includes customisations collected from many sources.  Written
@@ -28,7 +28,8 @@
 
 ;; Initialise variable for, and load emacs-uptime. (M-x emacs-uptime)
 (defvar *emacs-start-time* (current-time) "blink-blink yawn")
-;(require 'emacs-uptime)
+;; http://gnuvola.org/software/personal-elisp/dist/lisp/diversions/emacs-uptime.el
+(require 'emacs-uptime)
 
 ;; setup emacs lisp package archives (first one is the default):
 (require 'package)
@@ -47,34 +48,24 @@
 (package-initialize)
 
 ;; color-themes (see: http://www.emacswiki.org/cgi-bin/wiki/ColorTheme)
-;; 
-
 ;;(require 'color-theme-autoload "color-theme-autoloads")
 
 (require 'color-theme)
-;(setq custom-theme-load-path (quote (custom-theme-directory t 
-;	 "~neil/.emacs.d/themes")))
-
-;(load-theme 'solarized-dark t)  ; load wombat theme later - see custom at eof.
-
-;(color-theme-initialize)
-;(color-theme-solarized-dark)
-;;(load-theme 'solarized-dark t)
 
 ;; Enable this to automatically save the default desktop. See EOF for
 ;; `desktop-read', which is enabled (if emacs finds .emacs-desktop).
-;(setq desktop-enable t)       ; nil = the default setting.
+;;(setq desktop-enable t)
 
 ;; Use this directory for the various utility functions/packages.
 ;; Note that this is specific to the flavor of Emacs running.
-;; Also, it's $HOME apecific
+;; Also, it's $HOME specific
 (setq my-emacs-dir "~/.emacs.d/")
 
 ;; Define a string value for myself (for use in scripts, etc)
 (setq nw-identifier "Neil Woods <neil@netlexer.uk>")
 
 ;; Don't show the GNU splash screen
-; (setq inhibit-startup-message t)
+(setq inhibit-startup-message t)
 
 ;; Display mode-line with time & line#/col# :
 ; (display-time-mode t)
@@ -84,7 +75,7 @@
 ;; not just ones which have it set interactively on a buffer-local basis.
 (setq-default save-place t)
 
-;; Keep a list of recently opened files (kept across sessions, too!) (*NEW*)
+;; Keep a list of recently opened files (kept across sessions, too!)
 (require 'recentf)
 (recentf-mode 1)
 
@@ -151,14 +142,6 @@
 
 (define-key global-map [kp-enter] 'newline-and-indent)
 
-;; Try this with the return key, (TODO: This requires more work!)
-;(define-key global-map [(enter)] 'newline-and-indent)
-
-
-;; TODO TODO TODO ;;; TODO TODO TODO ;;; TODO TODO TODO
-;; Set-mark-command is bound to (Shift)Control-@; bind it also to Control-'
-;; for use when not in an X window (XTerms & the like don't respond to SC-@ ?)
-
 (setq next-line-add-newlines nil)
 
 ;; The only useful thing to come from PC editing ;-)
@@ -210,7 +193,6 @@
 
  ;; Re-define the normal `save-buffers-kill-emacs' function when in X to
  ;; delete the current frame. Will NOT delete the LAST frame.
- ;; TODO: Add a function to save (+kill?) buffers visible in the frame.
  (global-unset-key "\C-x\C-c")
  (global-set-key "\C-x\C-c" 'delete-frame)
 
@@ -285,7 +267,7 @@
 ;;(setq fast-lock-cache-directories
 ;;      (list (concat my-emacs-dir "fastlock")))
 
-;(require 'highline)           ;; used by (at least) mldonkey, gnus.
+(require 'highline)           ;; used by (at least) mldonkey, gnus.
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  DIRED MODE
@@ -766,9 +748,9 @@ by typing \\[beginning-of-line] \\[delete-line]."
 
 ;; could add a (local-set-key [return] 'reindent-then-newline-and-indent) too
 
-;(setq c-default-style "bsd")
+(setq c-default-style "bsd")
 
-;(setq cperl-hairy t)
+(setq cperl-hairy t)
 
 ;;;; skeleton mode
 (global-set-key "\"" 'skeleton-pair-insert-maybe)
@@ -777,7 +759,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (global-set-key "[" 'skeleton-pair-insert-maybe)
 (global-set-key "(" 'skeleton-pair-insert-maybe)
 (global-set-key "{" 'skeleton-pair-insert-maybe)
-;;(setq skeleton-pair t)           ;; uncomment to turn this mode on
+(setq skeleton-pair t)           ;; uncomment to turn this mode on
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -871,6 +853,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
  '(gnus-treat-newsgroups-picon nil)
  '(indicate-empty-lines t)
  '(menu-bar-mode nil)
+ '(mouse-autoselect-window 0.5)
  '(notmuch-saved-searches
    (quote
     ((:name "inbox" :query "tag:inbox")
