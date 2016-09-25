@@ -4,11 +4,15 @@ export BUILDDIR=/home/neil/arch/builds
 export SRCDEST=/home/neil/arch/sources
 export CCACHE_PATH=/usr/bin
 export EDITOR='emacsclient -c '
+export GIT_EDITOR='emacsclient -nw '
 export HISTCONTROL=ignoreboth
-export HISTFILE HISTSIZE SAVEHIST
+export HISTFILE=~/.histfile
+export HISTSIZE=2000
+export SAVEHIST=2000
 export IRCNICK=daedalux
 export LC_COLLATE=C
-export LESS='-eaisMR'
+export LESS='-ceaisMR'
+export LESSEDIT='emacsclient -nw  ?lm+%lm. %f '
 export MAILPATH='/home/neil/Mail/mbox:/var/mail/neil'
 #export MANWIDTH=80
 export NNTPSERVER=news.eternal-september.org

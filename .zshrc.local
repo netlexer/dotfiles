@@ -1,4 +1,6 @@
-# Lines configured by zsh-newuser-install
+#
+# ~/.zshrc.local
+#
 HISTFILE=~/.histfile
 HISTSIZE=2000
 SAVEHIST=2000
@@ -9,14 +11,14 @@ setopt no_auto_remove_slash
 #setopt bashautolist # nolistambiguous
 
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
+
+eval $(dircolors -b ~/.dir_colors)
 
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' menu select=long
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle :compinstall filename '/home/neil/.zshrc'
+zstyle :compinstall filename '/home/neil/.zshrc.local'
 
 autoload -Uz compinit
 compinit
@@ -99,7 +101,8 @@ alias ddf='pydf -h'
 alias df='df -h '
 alias diff='colordiff -u'
 alias du='du -h '
-alias e='emacsclient -n -c -a jmacs '
+alias e='emacsclient -nw -a jmacs '
+alias em='emacsclient -c '
 alias grep='command grep --color=auto --directories=skip'
 alias h='history -100'
 alias j='jmacs '
