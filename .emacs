@@ -1,12 +1,11 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-09-23 16:48:04 neil>
+;;; Time-stamp: <2016-09-25 18:58:27 neil>
 ;;;
-;;; Emacs configuration file for Neil Woods <neil@netlexer.uk>.
-;;; Includes customisations collected from many sources.  Written
-;;; primarily for GNU Emacs (originally ver 19.x), with many
-;;; modifications along the way. Needs a good cleanup/rewrite.
-;;; Neil Woods (c) 1992-2016.
+;;; Emacs configuration file by Neil Woods <neil@netlexer.uk>.
+;;; Written primarily for GNU Emacs (originally ver 19.x), with many
+;;; ideas from usenet, emacswiki, etc. 
+;;; (c) Neil Woods, 1992-2016.
 
 ;; Announce start of file loading...
 (message "Loading Emacs personal init file...")
@@ -392,8 +391,6 @@
       backup-by-copying nil
       backup-by-copying-when-linked t)
 
-;; Set to t. If nil (the default) doesn't backup VC (RCS etc) files!
-(setq vc-make-backup-files t)
 
 ;; disable backups for files in /tmp or in my Mail or News directories.
 (defun nw-backup-enable-predicate (filename)
@@ -574,6 +571,28 @@ by typing \\[beginning-of-line] \\[delete-line]."
       (append '(("\\.sl$" . slang-mode)) auto-mode-alist))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  VERSION CONTROL & related modes/hooks.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Support .md files, as used on github and elsewhere
+
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+(autoload 'gfm-mode "gfm-mode"
+   "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
+;; Set to t. If nil (the default) doesn't backup VC (RCS etc) files!
+(setq vc-make-backup-files t)
+;; avoid 'Symbolic link to Git-controlled source file' messages, just do it.
+(setq vc-follow-symlinks t)
+
+
+
 ;; A few variables which affect the *shell* (emacs terminal) in a window
 ;; (also includes the general 'comint' = COMMand INTerpreter functions).
 (setq shell-prompt-pattern "^[^#$%>\n]*[#$%>] *")
@@ -641,13 +660,18 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (setq cperl-hairy t)
 
 ;;;; skeleton mode
-(global-set-key "\"" 'skeleton-pair-insert-maybe)
+;;(global-set-key "\"" 'skeleton-pair-insert-maybe)
 ;;(global-set-key "'" 'skeleton-pair-insert-maybe)
-(global-set-key "`" 'skeleton-pair-insert-maybe)
+;;(global-set-key "`" 'skeleton-pair-insert-maybe)
 (global-set-key "[" 'skeleton-pair-insert-maybe)
 (global-set-key "(" 'skeleton-pair-insert-maybe)
 (global-set-key "{" 'skeleton-pair-insert-maybe)
 (setq skeleton-pair t)           ;; uncomment to turn this mode on
+
+(add-hook 'c-mode-common-hook
+          (lambda ()
+	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+	      (ggtags-mode 1))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -729,20 +753,25 @@ by typing \\[beginning-of-line] \\[delete-line]."
     ("71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
  '(desktop-save-mode t)
  '(display-time-mode t)
- '(erc-server "nova")
+ '(erc-server "haxan.lan")
  '(erc-user-full-name "\"What's up doc?\"")
  '(font-use-system-font nil)
  '(foreground-color "#839496")
  '(gnus-group-list-inactive-groups nil)
  '(gnus-treat-newsgroups-picon nil)
  '(indicate-empty-lines t)
- '(menu-bar-mode nil)
+ '(menu-bar-mode t)
  '(mouse-autoselect-window 0.5)
+ '(notmuch-saved-searches
+   (quote
+    ((:name "inbox" :query "tag:inbox")
+     (:name "unread" :query "tag:unread"))))
  '(package-check-signature nil)
  '(package-selected-packages
    (quote
-    (yaml-mode smart-mode-line-powerline-theme ox-nikola js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme color-theme-solarized color-theme-sanityinc-solarized color-theme-modern color-theme-gruber-darker cl-generic)))
+    (xkcd gh-md gist gitattributes-mode github-clone github-notifier github-search gitty yaml-mode smart-mode-line-powerline-theme ox-nikola js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme color-theme-solarized color-theme-sanityinc-solarized color-theme-modern color-theme-gruber-darker cl-generic)))
  '(send-mail-function (quote sendmail-send-it))
+ '(show-paren-mode t)
  '(starttls-extra-arguments nil)
  '(tool-bar-mode nil))
 
@@ -751,7 +780,10 @@ by typing \\[beginning-of-line] \\[delete-line]."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Inconsolata" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Inconsolata" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))
+ '(bold ((t (:family "Inconsolata" :foundry "PfEd" :slant normal :weight bold :height 120 :width normal))))
+ '(italic ((t (:slant italic :weight normal :height 120 :width normal :foundry "PfEd" :family "Inconsolata")))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of custom section.
