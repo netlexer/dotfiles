@@ -315,16 +315,16 @@ EIGHTBIT 1
 .xml           01;35
 .yml           01;35
 
-.xinitrc        00;33
-.Xauthority     00;33
+.xinitrc        38;5;200
+.Xauthority     38;5;200
 .gpg-agent-info 01;31
-.Xmodmap        00;33
-.Xresources     00;33
-.xserverrc	00;33
-.emacs		01;33
-.gnus		01;33
-.el		01;33
-.elc		00;33
-.dir_colors	00;34
+.Xmodmap        38;5;200
+.Xresources     38;5;200
+.xserverrc	38;5;200
+.emacs		38;5;191
+.gnus		38;5;191
+.el		38;5;191
+.elc		38;5;179
+.dir_colors	38;5;118
 .dmrc		00;33
 
