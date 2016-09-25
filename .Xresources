@@ -6,7 +6,7 @@ Xft.dpi: 		    96
 Xft.antialias: 		    true
 Xft.hinting: 		    true
 Xft.rgba: 		    rgb
-Xft.autohint: 		    false
+Xft.autohint: 		    true
 Xft.hintstyle: 		    hintslight
 Xft.lcdfilter: 		    lcddefault
 
@@ -74,7 +74,7 @@ URxvt*foreground: #DEDEDE
 
 URxvt*colorBD: #fdf6e3
 URxvt*colorUL: #86a2b0
-URxvt*colorIT: #8AE234
+!URxvt*colorIT: #8AE234
 !URxvt.underlineColor:   yellow
 
 ! black
