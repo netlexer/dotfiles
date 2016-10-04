@@ -1,6 +1,6 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-09-25 18:58:27 neil>
+;;; Time-stamp: <2016-10-04 06:40:45 neil>
 ;;;
 ;;; Emacs configuration file by Neil Woods <neil@netlexer.uk>.
 ;;; Written primarily for GNU Emacs (originally ver 19.x), with many
@@ -30,26 +30,17 @@
 ;; http://gnuvola.org/software/personal-elisp/dist/lisp/diversions/emacs-uptime.el
 (require 'emacs-uptime)
 
-;; setup emacs lisp package archives (first one is the default):
 (require 'package)
-;;(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-;;			 ("marmalade" . "https://marmalade-repo.org/packages/")
-;;			 ("org" . "https://orgmode.org/elpa/")))
-
-;; use melpa for latest elisp packages
-(add-to-list 'package-archives 
-	     '("melpa" . "https://melpa.org/packages/"))
+;; default plus add melpa for latest elisp packages
+(add-to-list 'package-archives
+  '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 
 (unless package-archive-contents    ;; Refresh the packages descriptions
   (package-refresh-contents))
 (setq package-load-list '(all))     ;; List of packages to load
-
 (package-initialize)
 
-;; color-themes (see: http://www.emacswiki.org/cgi-bin/wiki/ColorTheme)
-;;(require 'color-theme-autoload "color-theme-autoloads")
-
-(require 'color-theme)
+(load-theme 'cyberpunk t)
 
 ;; Enable this to automatically save the default desktop. See EOF for
 ;; `desktop-read', which is enabled (if emacs finds .emacs-desktop).
@@ -254,41 +245,7 @@
 
 (add-hook 'ibuffer-mode-hook 'highline-mode)
 
-(global-set-key [(alt ?b)] 'ibuffer)
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  BIG BROTHER DATABASE
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Note: In Debian, all bbdb stuff is loaded. I just need to use the function
-;; `bbdb-insinuate' for each mailer/news I want to use it with.
-;; (done: see ~/.gnus.el) Added 05 Aug 04 (from the Gnus Howto my.gnus.org)
-
-(require 'bbdb)
-;;If you don't live in Northern America, you should disable the
-;;syntax check for telephone numbers by saying
-(setq bbdb-north-american-phone-numbers-p nil)
-;;Tell bbdb about your email address:
-(setq bbdb-user-mail-names
-      (regexp-opt '("cnw@pobox.com"
-		    "cnw+usenet@pobox.com"
-		    "cnw+gmane@pobox.com"
-		    "egregore@riseup.net"
-		    "neil@netlexer.uk"
-		    "arch@netlexer.uk")))
-;;cycling while completing email addresses
-(setq bbdb-complete-name-allow-cycling t)
-
-;; handy completions
-;(define-key message-minibuffer-local-map (kbd "<tab>") 'bbdb-complete-name)
-
-;;Popup-buffers
-(setq bbdb-use-pop-up t)
-
-(bbdb-initialize 'gnus 'message)
-;(setq bbdb-send-mail-style 'message) ;; this is normally nil - meaning guess
-
-(autoload 'notmuch "notmuch" "Notmuch mail" t)
+(global-set-key [(super ?b)] 'ibuffer)
 
 ;; define the coding system
 ;; http://bbdb.sourceforge.net/faq.html
@@ -325,7 +282,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/usr/bin/uzbl")
+      browse-url-generic-program "/usr/bin/uzbl-browser")
 
 (global-set-key "\C-xm" 'browse-url-at-point)
 
@@ -639,6 +596,70 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (autoload 'pkgbuild-mode "pkgbuild-mode.el" "PKGBUILD mode." t)
 (setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
 
+;; header creation & update (autoloaded via package-initialise)
+(autoload 'auto-update-file-header "header2")
+(add-hook 'write-file-hooks 'auto-update-file-header)
+(autoload 'auto-make-header "header2")
+(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
+(add-hook 'c-mode-common-hook   'auto-make-header)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;   Programming: Haskell
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;Make Emacs look in Cabal directory for binaries
+(let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
+  (setenv "PATH" (concat my-cabal-path ":" (getenv "PATH")))
+  (add-to-list 'exec-path my-cabal-path))
+
+(setq haskell-process-auto-import-loaded-modules t
+      haskell-process-log t
+      haskell-process-suggest-remove-import-lines t
+      haskell-process-type (quote cabal-repl)
+      haskell-tags-on-save t)
+
+; Choose indentation mode
+;; Use haskell-mode indentation
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;; Use hi2
+;(require 'hi2)
+;(add-hook 'haskell-mode-hook 'turn-on-hi2)
+;; Use structured-haskell-mode
+;(add-hook 'haskell-mode-hook 'structured-haskell-mode)
+
+; Add F8 key combination for going to imports block
+(eval-after-load 'haskell-mode
+  '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
+
+; Add key combinations for interactive haskell-mode
+(eval-after-load 'haskell-mode
+  '(progn
+     (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+     (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+     (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+     (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
+     (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
+     (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
+(eval-after-load 'haskell-cabal
+  '(progn
+     (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+     (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+     (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+     (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
+
+(eval-after-load 'haskell-mode
+  '(define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile))
+(eval-after-load 'haskell-cabal
+  '(define-key haskell-cabal-mode-map (kbd "C-c C-o") 'haskell-compile))
+
+;; GHC-MOD
+;; -------
+
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   Programming: C/C++ modes.
@@ -659,20 +680,10 @@ by typing \\[beginning-of-line] \\[delete-line]."
 
 (setq cperl-hairy t)
 
-;;;; skeleton mode
-;;(global-set-key "\"" 'skeleton-pair-insert-maybe)
-;;(global-set-key "'" 'skeleton-pair-insert-maybe)
-;;(global-set-key "`" 'skeleton-pair-insert-maybe)
-(global-set-key "[" 'skeleton-pair-insert-maybe)
-(global-set-key "(" 'skeleton-pair-insert-maybe)
-(global-set-key "{" 'skeleton-pair-insert-maybe)
-(setq skeleton-pair t)           ;; uncomment to turn this mode on
-
 (add-hook 'c-mode-common-hook
           (lambda ()
 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
 	      (ggtags-mode 1))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; rs-info : Enhancements to info mode (esp. with Gnus) by Reiner Steib
@@ -701,7 +712,6 @@ by typing \\[beginning-of-line] \\[delete-line]."
         (nil (menu-bar-lines . 0) (tool-bar-lines . 0))))
 
 (scroll-bar-mode nil)
-(setq tooltip-hide-delay 8)           ; default of 10 seconds too long.
 
 ;; for use in xterm
 (require 'xt-mouse)
@@ -732,7 +742,6 @@ by typing \\[beginning-of-line] \\[delete-line]."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: Maybe put these in a separate file again?
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -741,49 +750,77 @@ by typing \\[beginning-of-line] \\[delete-line]."
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+   ["#000000" "#8b0000" "#00ff00" "#ffa500" "#7b68ee" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(background-color "#002b36")
  '(background-mode dark)
+ '(blink-matching-paren (quote jump))
  '(canlock-password "729dd1edbb7f5765107438e259df42fe65cf1dac")
  '(column-number-mode t)
  '(cursor-color "#839496")
  '(custom-enabled-themes (quote (cyberpunk)))
  '(custom-safe-themes
    (quote
-    ("71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
- '(desktop-save-mode t)
+    ("e64111716b1c8c82638796667c2c03466fde37e69cada5f6b640c16f1f4e97df" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
  '(display-time-mode t)
+ '(electric-pair-mode t)
  '(erc-server "haxan.lan")
  '(erc-user-full-name "\"What's up doc?\"")
+ '(focus-follows-mouse t)
  '(font-use-system-font nil)
  '(foreground-color "#839496")
+ '(global-semantic-decoration-mode t)
+ '(global-semantic-idle-summary-mode t)
  '(gnus-group-list-inactive-groups nil)
  '(gnus-treat-newsgroups-picon nil)
+ '(ibuffer-saved-filters
+   (quote
+    ((""
+      ((mode . Custom-mode)))
+     ("gnus"
+      ((or
+	(mode . message-mode)
+	(mode . mail-mode)
+	(mode . gnus-group-mode)
+	(mode . gnus-summary-mode)
+	(mode . gnus-article-mode))))
+     ("programming"
+      ((or
+	(mode . emacs-lisp-mode)
+	(mode . cperl-mode)
+	(mode . c-mode)
+	(mode . java-mode)
+	(mode . idl-mode)
+	(mode . lisp-mode)))))))
  '(indicate-empty-lines t)
- '(menu-bar-mode t)
  '(mouse-autoselect-window 0.5)
+ '(mouse-yank-at-point t)
  '(notmuch-saved-searches
    (quote
     ((:name "inbox" :query "tag:inbox")
      (:name "unread" :query "tag:unread"))))
- '(package-check-signature nil)
  '(package-selected-packages
    (quote
-    (xkcd gh-md gist gitattributes-mode github-clone github-notifier github-search gitty yaml-mode smart-mode-line-powerline-theme ox-nikola js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme color-theme-solarized color-theme-sanityinc-solarized color-theme-modern color-theme-gruber-darker cl-generic)))
+    (flymake-haskell-multi ghc ghc-imported-from haskell-tab-indent hindent w3m irfc tuareg header2 xkcd gh-md gist gitattributes-mode github-clone github-notifier github-search gitty yaml-mode js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme)))
+ '(scroll-bar-mode (quote right))
+ '(semantic-mode t)
  '(send-mail-function (quote sendmail-send-it))
- '(show-paren-mode t)
+ '(show-paren-ring-bell-on-mismatch t)
+ '(show-paren-style (quote expression))
+ '(show-paren-when-point-in-periphery t)
  '(starttls-extra-arguments nil)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(window-divider-default-places (quote right-only))
+ '(window-divider-default-right-width 3)
+ '(x-gtk-use-system-tooltips nil))
+
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Inconsolata" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))
- '(bold ((t (:family "Inconsolata" :foundry "PfEd" :slant normal :weight bold :height 120 :width normal))))
- '(italic ((t (:slant italic :weight normal :height 120 :width normal :foundry "PfEd" :family "Inconsolata")))))
-
+ '(default ((t (:inherit nil :stipple nil :background "#000000" :foreground "#d3d3d3" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "PfEd" :family "Inconsolata LGC"))))
+ '(italic ((t (:slant italic :weight normal :height 98 :width normal :foundry "PfEd" :family "Inconsolata LGC")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of custom section.
