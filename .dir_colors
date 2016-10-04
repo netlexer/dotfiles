@@ -70,7 +70,7 @@ TERM xterm-debian
 #NORMAL    	00	# no color code at all
 FILE		38;5;247	# regular file: use no color at all
 RESET		0	# reset to "normal" color
-DIR		01;34	# directory
+DIR		38;5;78	# directory
 LINK		01;36	# symbolic link.  (If you set this to 'target' instead of a
                 	# numerical value, the color is as for the file pointed to.)
 MULTIHARDLINK 00	# regular file with more than one link
@@ -274,8 +274,8 @@ EIGHTBIT 1
 .xspf          01;36
 .lua           00;33
 .map           00;33
-.markdown      00;33
-.md            00;33
+.markdown      38;5;221
+.md            38;5;221
 .mf            00;33
 .mfasl         00;33
 .mi            00;33
@@ -323,7 +323,7 @@ EIGHTBIT 1
 .xserverrc	38;5;200
 .emacs		38;5;191
 .gnus		38;5;191
-.el		38;5;191
+.el		38;5;214
 .elc		38;5;179
 .dir_colors	38;5;118
 .dmrc		00;33
