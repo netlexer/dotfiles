@@ -8,28 +8,22 @@ if [ -f "$userresources" ]; then
     xrdb -merge "$userresources"
 fi
 
-# Enable zapping (C-A-<Bksp> kills X)
-setxkbmap -option terminate:ctrl_alt_bksp
-# add another control key
-setxkbmap -option "ctrl:nocaps" 
-# setup keymap modifiers for Emacs...
+# setup keymap modifiers for Emacs (with caps-lock -> HYPER modifier)
 xmodmap ~/.Xmodmap
 # so I don't have to press the back-tick twice
 xmodmap -e "keycode  49 = grave notsign dead_grave brokenbar"
+# Enable zapping (C-A-<Bksp> kills X)
+setxkbmap -option terminate:ctrl_alt_bksp
 
 xsetroot -cursor_name left_ptr
 
-# start some nice programs
-
+# sensible defaults
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then
     for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
 	[ -x "$f" ] && . "$f"
     done
     unset f
 fi
-
-# Disable bell
-#xset -b
 
 # set keyboard rate
 xset r rate 350 60
@@ -89,11 +83,12 @@ case $WM in
     xmonad)
 	logmsg
 	PATH=$PATH:$HOME/.xmonad/bin
-	tray &
+#	tray &
 	exec /usr/bin/xmonad 
 	;;
     *)
 	logmsg
+	# could put xterm here...
 	exec /usr/bin/twm
 	;;
 esac
