@@ -1,9 +1,10 @@
 #
 # ~/.zshrc.local
 #
-HISTFILE=~/.histfile
-HISTSIZE=2000
-SAVEHIST=2000
+export HISTFILE=~/.histfile
+export HISTSIZE=2000
+export SAVEHIST=2000
+
 setopt appendhistory beep nomatch
 unsetopt autocd
 setopt no_auto_remove_slash
@@ -14,8 +15,13 @@ bindkey -e
 
 eval $(dircolors -b ~/.dir_colors)
 
-zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+# The following lines were added by compinstall
+
+# zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle ':completion:*' ignore-parents parent pwd directory
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list ''
 zstyle ':completion:*' menu select=long
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle :compinstall filename '/home/neil/.zshrc.local'
@@ -35,7 +41,10 @@ bindkey "$(echotc kd)" down-line-or-history
 bindkey "^[Oy" up-line-or-search
 bindkey "^[Os" down-line-or-search
 
+# defined globally, redefine here (eg, for real italics in man pages)
 unset LESS_TERMCAP_md LESS_TERMCAP_us
+export LESS_TERMCAP_us=$'\E[03m'
+export LESS_TERMCAP_so=$'\E[07;33;40m'
 
 # use 256 colours in some terms
 case "$TERM" in
