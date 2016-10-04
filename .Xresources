@@ -10,12 +10,9 @@ Xft.autohint: 		    true
 Xft.hintstyle: 		    hintslight
 Xft.lcdfilter: 		    lcddefault
 
-!Xft.rgba:                   none
-!Xft.hintstyle:              hintfull
-
 !-------------------------------------------------------------------------------
 ! URxvt settings
-! Colours lifted from Solarized (http://ethanschoonover.com/solarized)
+! Colours (loosly) based on Solarized (http://ethanschoonover.com/solarized)
 ! More info at:
 ! http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod
 !-------------------------------------------------------------------------------
@@ -38,6 +35,7 @@ URxvt.lineSpace:            0
 URxvt*font: 		    xft:Inconsolata:Regular:size=12, 9x15, xft:Code2000
 URxvt*boldFont: 	    xft:Inconsolata:Bold:size=12
 URxvt*italicFont: 	    xft:Liberation Mono:italic:size=10:autohint=true
+!URxvt*italicFont:	    xft:Inconsolata LGC:italic:size=10
 
 ! Fix font space
 URxvt*letterSpace: -1
@@ -102,3 +100,11 @@ URxvt*color14 : #34E2E2
 URxvt*color7  : #D3D7CF
 URxvt*color15 : #EEEEEC
 
+! Emacs settings
+Emacs.background: black
+Emacs.foreground: white
+Emacs.menuBar: 1
+Emacs.toolBar: 0
+Emacs.verticalScrollBars: off
+Emacs.FontBackend: xft
+!Emacs.font: Inconsolata LGC:size=12
