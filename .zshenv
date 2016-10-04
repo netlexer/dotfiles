@@ -2,7 +2,7 @@
 export AURDEST=/home/neil/arch/builds
 export BUILDDIR=/home/neil/arch/builds
 export SRCDEST=/home/neil/arch/sources
-export CCACHE_PATH=/usr/bin
+#export CCACHE_PATH=/usr/bin
 export EDITOR='emacsclient -c '
 export GIT_EDITOR='emacsclient -nw '
 export HISTCONTROL=ignoreboth
