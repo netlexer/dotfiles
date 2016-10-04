@@ -1,6 +1,6 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-10-04 12:41:26 neil>
+;;; Time-stamp: <2016-10-04 14:14:37 neil>
 ;;;
 ;;; Emacs configuration file by Neil Woods <neil@netlexer.uk>.
 ;;; Written primarily for GNU Emacs (originally ver 19.x), with many
@@ -283,7 +283,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/usr/bin/uzbl-browser")
+      browse-url-generic-program "~/bin/xlinks2")
 
 (global-set-key "\C-xm" 'browse-url-at-point)
 
