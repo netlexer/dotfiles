@@ -1,6 +1,6 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-10-04 06:40:45 neil>
+;;; Time-stamp: <2016-10-04 12:41:26 neil>
 ;;;
 ;;; Emacs configuration file by Neil Woods <neil@netlexer.uk>.
 ;;; Written primarily for GNU Emacs (originally ver 19.x), with many
@@ -111,7 +111,7 @@
 
 ;; Now define a function to insert the time + personal identity (eg email).
 ;; A small comment may be added at the end, if needed.
-;; neil <neil@phasmic.org> -- 11/12/01 17:51:26 : modified format (like this!),
+;; neil <neil@nova.lan> -- 11/12/01 17:51:26 : modified format (like this!),
 ;;  -- that is, it doesn't use nw-insert-time anymore.
 (defun nw-insert-ident ()
   (interactive)
@@ -177,35 +177,35 @@
 
 ;; (This block of code is ONLY applicable under X)
 
-(Xwin-code
- ;; Load my X specific code:
- ;; This sets the colour/size & other properties of the X frames.
+;;(Xwin-code
+;; Load my X specific code:
+;; This sets the colour/size & other properties of the X frames.
 
- ;; Re-define the normal `save-buffers-kill-emacs' function when in X to
- ;; delete the current frame. Will NOT delete the LAST frame.
- (global-unset-key "\C-x\C-c")
- (global-set-key "\C-x\C-c" 'delete-frame)
+;; Re-define the normal `save-buffers-kill-emacs' function when in X to
+;; delete the current frame. Will NOT delete the LAST frame.
+(global-unset-key "\C-x\C-c")
+(global-set-key "\C-x\C-c" 'delete-frame)
 
- (global-set-key [(alt ?i)] 'iconify-frame)   ; Alt-i
+(global-set-key [(alt ?i)] 'iconify-frame)   ; Alt-i
 
- ;; Set the text for titlebar and icons - Icon only needs name of buffer -
- ;; the icon graphic xbm will, of course, indicate it's GNU Emacs.
- (setq frame-title-format '("emacs@" system-name " [%b]" ))
- (setq icon-title-format '("[%b]"))
+;; Set the text for titlebar and icons - Icon only needs name of buffer -
+;; the icon graphic xbm will, of course, indicate it's GNU Emacs.
+(setq frame-title-format '("emacs@" system-name " [%b]" ))
+(setq icon-title-format '("[%b]"))
 
- ;; these look pretty cool... (see also ~/.Xdefaults)
- ;;(set-face-background 'modeline "midnightblue")
- ;;(set-face-foreground 'modeline "goldenrod2")
+;; these look pretty cool... (see also ~/.Xdefaults)
+;;(set-face-background 'modeline "midnightblue")
+;;(set-face-foreground 'modeline "goldenrod2")
 
- ;; I don't wan't the GTK+ (or any) dialog boxes on mouse clicks when invoked
- ;; from the menu (this is new in version 22).
- ;; (next line uses old gtk dialog iff next two lines are set to t.
- (setq x-use-old-gtk-file-dialog t)
- (setq use-file-dialog nil)
- (setq use-dialog-box nil)
- ;; If set to t, this autoselects windows within frames by moving mouse there
- (setq mouse-autoselect-window t)     ;; default setting => nil.
-) ;;   End: X-win-code.
+;; I don't wan't the GTK+ (or any) dialog boxes on mouse clicks when invoked
+;; from the menu (this is new in version 22).
+;; (next line uses old gtk dialog iff next two lines are set to t.
+(setq x-use-old-gtk-file-dialog t)
+(setq use-file-dialog nil)
+(setq use-dialog-box nil)
+;; If set to t, this autoselects windows within frames by moving mouse there
+(setq mouse-autoselect-window -1.5)     ;; default setting => nil.
+;;) ;;   End: X-win-code.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Font-lock-mode stuff (in particular)
@@ -227,7 +227,8 @@
           (lambda ()
             (setq dired-omit-files "^\\.[a-z|A-Z]+\\|^\\.?#\\|^\\.$")
 	    ;; could add dired-omit-extentions here, also.
-	    (setq dired-omit-files-p t)
+	    (setq dired-omit-files-p nil)   ;; disabled by default
+	    (highline-mode)
 	    (define-key dired-mode-map [delete] 'dired-flag-file-deletion)
 	    (define-key dired-mode-map [return] 'dired-find-file-other-window)
 	    (define-key dired-mode-map [C-down-mouse-1]
@@ -245,7 +246,7 @@
 
 (add-hook 'ibuffer-mode-hook 'highline-mode)
 
-(global-set-key [(super ?b)] 'ibuffer)
+(global-set-key [(hyper ?b)] 'ibuffer)
 
 ;; define the coding system
 ;; http://bbdb.sourceforge.net/faq.html
@@ -315,7 +316,7 @@
 
 ;; Hippie expand enables completion of filenames/dirs in buffers
 (require 'hippie-exp)
-(global-set-key [(alt return)] 'hippie-expand)
+(global-set-key [(hyper return)] 'hippie-expand)
 (global-set-key [(control tab)] 'hippie-expand)
 (setq hippie-expand-verbose t)
 
@@ -543,11 +544,8 @@ by typing \\[beginning-of-line] \\[delete-line]."
    "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-;; Set to t. If nil (the default) doesn't backup VC (RCS etc) files!
-(setq vc-make-backup-files t)
 ;; avoid 'Symbolic link to Git-controlled source file' messages, just do it.
 (setq vc-follow-symlinks t)
-
 
 
 ;; A few variables which affect the *shell* (emacs terminal) in a window
@@ -761,6 +759,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
  '(custom-safe-themes
    (quote
     ("e64111716b1c8c82638796667c2c03466fde37e69cada5f6b640c16f1f4e97df" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
+ '(desktop-save-mode t)
  '(display-time-mode t)
  '(electric-pair-mode t)
  '(erc-server "haxan.lan")
@@ -768,36 +767,27 @@ by typing \\[beginning-of-line] \\[delete-line]."
  '(focus-follows-mouse t)
  '(font-use-system-font nil)
  '(foreground-color "#839496")
+ '(global-magit-file-mode t)
  '(global-semantic-decoration-mode t)
  '(global-semantic-idle-summary-mode t)
  '(gnus-group-list-inactive-groups nil)
  '(gnus-treat-newsgroups-picon nil)
- '(ibuffer-saved-filters
-   (quote
-    ((""
-      ((mode . Custom-mode)))
-     ("gnus"
-      ((or
-	(mode . message-mode)
-	(mode . mail-mode)
-	(mode . gnus-group-mode)
-	(mode . gnus-summary-mode)
-	(mode . gnus-article-mode))))
-     ("programming"
-      ((or
-	(mode . emacs-lisp-mode)
-	(mode . cperl-mode)
-	(mode . c-mode)
-	(mode . java-mode)
-	(mode . idl-mode)
-	(mode . lisp-mode)))))))
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-type (quote cabal-repl))
+ '(haskell-tags-on-save t)
  '(indicate-empty-lines t)
- '(mouse-autoselect-window 0.5)
  '(mouse-yank-at-point t)
  '(notmuch-saved-searches
    (quote
     ((:name "inbox" :query "tag:inbox")
      (:name "unread" :query "tag:unread"))))
+ '(package-archives
+   (quote
+    (("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+ '(package-check-signature nil)
  '(package-selected-packages
    (quote
     (flymake-haskell-multi ghc ghc-imported-from haskell-tab-indent hindent w3m irfc tuareg header2 xkcd gh-md gist gitattributes-mode github-clone github-notifier github-search gitty yaml-mode js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme)))
