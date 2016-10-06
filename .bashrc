@@ -86,7 +86,10 @@ unset use_color safe_term match_lhs sh
 
 # use 256 colours in xterms
 case "$TERM" in
-       xterm*) TERM=xterm-256color
+    xterm*) TERM=xterm-256color
+	    ;;
+    rxvt*)  TERM=rxvt-256color
+	    ;;
 esac
 
 # better yaourt colors
