@@ -14,3 +14,6 @@ alias loc='/usr/bin/locate'
 alias lt='ls -ltr '
 alias m='man'
 alias t='less'
+alias yt='youtube-dl -n "$1" '
+alias ze='jmacs -syntax sh ~/.zshrc.local'
+
