@@ -8,15 +8,6 @@ if [ -f "$userresources" ]; then
     xrdb -merge "$userresources"
 fi
 
-# setup keymap modifiers for Emacs (with caps-lock -> HYPER modifier)
-xmodmap ~/.Xmodmap
-# so I don't have to press the back-tick twice
-xmodmap -e "keycode  49 = grave notsign dead_grave brokenbar"
-# Enable zapping (C-A-<Bksp> kills X)
-setxkbmap -option terminate:ctrl_alt_bksp
-
-xsetroot -cursor_name left_ptr
-
 # sensible defaults
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then
     for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
@@ -42,7 +33,6 @@ xrandr --output LVDS --brightness 1.2
 unset LC_ALL
 export LANG=en_GB.UTF-8
 export LC_MESSAGES=C
-export XAUTHORITY=/home/neil/.Xauthority
 
 # Use XToolkit in java applications
 export AWT_TOOLKIT=XToolkit
@@ -52,6 +42,13 @@ export AWT_TOOLKIT=XToolkit
 
 # Enable core dumps in case something goes wrong
 ulimit -c unlimited
+
+# setup keymap modifiers for Emacs (with caps-lock -> HYPER modifier)
+xmodmap ~/.Xmodmap
+# Enable zapping (C-A-<Bksp> kills X)
+setxkbmap -option terminate:ctrl_alt_bksp
+
+xsetroot -cursor_name left_ptr
 
 # Start window manager like this, e.g.:
 # % WM=awesome startx
