@@ -1,11 +1,11 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-10-04 23:51:08 neil>
+;;; Time-stamp: <2016-10-15 23:30:21 neil>
 ;;;
 ;;; Emacs configuration file by Neil Woods <neil@netlexer.uk>.
 ;;; Written originally for GNU Emacs (ver 19.x), with many
 ;;; ideas from usenet, emacswiki, etc.  
-;;; (c) Neil Woods, 1992-2016.
+;;; (c) Neil Woods, 1992-2016.                                  
 
 ;; Announce start of file loading...
 (message "Loading Emacs personal init file...")
@@ -18,7 +18,7 @@
       (progn (setq load-path (append (list nw_dir) load-path)))))
 
 ;; Load a sensible info search path (see also $INFOPATH)
-(setq Info-directory-list '("/usr/local/info/" "/usr/share/info/"))
+(setq Info-directory-list '("/usr/local/share/info/" "/usr/share/info/"))
 (require 'info)
 
 ;; A neat macro for X
@@ -33,11 +33,14 @@
 (require 'package)
 ;; default plus add melpa for latest elisp packages
 (add-to-list 'package-archives
-  '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+  '("melpa" . "https://melpa.org/packages/") t)
 
 (unless package-archive-contents    ;; Refresh the packages descriptions
   (package-refresh-contents))
 (setq package-load-list '(all))     ;; List of packages to load
+
+(add-hook 'package-menu-mode-hook 'highline-mode)
+
 (package-initialize)
 
 (load-theme 'cyberpunk t)
@@ -256,7 +259,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Spell checking
+;; Spell checking & dictionary lookup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Standard location of personal dictionary
@@ -272,18 +275,22 @@
 
 (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
 
-
 ;; flyspell
 (require 'flyspell)
 (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
 (define-key flyspell-mode-map (kbd "M-.") 'ispell-word)
+
+(load "dictionary-init")
+(global-set-key "\C-cs" 'dictionary-search)
+(global-set-key "\C-cm" 'dictionary-match-words)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WWW -- Read URL's with specified browser
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "~/bin/xlinks2")
+      browse-url-generic-program "/usr/bin/light")
 
 (global-set-key "\C-xm" 'browse-url-at-point)
 
@@ -357,6 +364,8 @@
        (not (string-match "~/News/" filename))))
 
 (setq backup-enable-predicate 'nw-backup-enable-predicate)
+
+(require 'minibuf-electric-gnuemacs)
 
 ;; Define function to match a parenthesis otherwise insert a % (like vi !;-P )
 
@@ -454,8 +463,53 @@ by typing \\[beginning-of-line] \\[delete-line]."
   (insert (format "(kbd \"%s\")" (key-description key))))
 
 
+;; really useful: M-. -> jump to definition of identifier at point
+;;                M-, -> jump back.
+(require 'elisp-slime-nav)
+(dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+  (add-hook hook 'turn-on-elisp-slime-nav-mode))
+
+
+;; Paredit & related
+
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
+(require 'eldoc) ; if not already loaded
+(eldoc-add-command
+ 'paredit-backward-delete
+ 'paredit-close-round)
+
+(defvar electrify-return-match
+  "[\]}\)\"]"
+  "If this regexp matches the text after the cursor, do an \"electric\"
+  return.")
+
+(defun electrify-return-if-match (arg)
+  "If the text after the cursor matches `electrify-return-match' then
+  open and indent an empty line between the cursor and the text.  Move the
+  cursor to the new line."
+  (interactive "P")
+  (let ((case-fold-search nil))
+    (if (looking-at electrify-return-match)
+	(save-excursion (newline-and-indent)))
+    (newline arg)
+    (indent-according-to-mode)))
+
+;; Using local-set-key in a mode-hook is a better idea.
+(global-set-key (kbd "RET") 'electrify-return-if-match)
+
+(setq show-paren-mode t
+      global-paren-face-mode t)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  MODES & File HOOKS (see above for font-lock stuff)
+;;  MODES & File HOOKS 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; EXtra modes for editing various generic UNIX specific files:
@@ -472,6 +526,15 @@ by typing \\[beginning-of-line] \\[delete-line]."
 		("*.\\.ad$"	    . xrdb-mode)
 		)
 	      auto-mode-alist))
+
+(define-generic-mode 'xmodmap-mode
+  '(?!)
+  '("add" "clear" "keycode" "keysym" "pointer" "remove")
+  nil
+  '("[xX]modmap\\(rc\\)?\\'")
+  nil
+  "Simple mode for xmodmap files.")
+
 
 (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
@@ -522,11 +585,10 @@ by typing \\[beginning-of-line] \\[delete-line]."
 
 (autoload 'rfcview-mode "rfcview" nil t)
 
-;; slang mode
-(autoload 'slang-mode "slang-mode"
-  "Mode for editing slang source files")
-(setq auto-mode-alist
-      (append '(("\\.sl$" . slang-mode)) auto-mode-alist))
+
+;; TeX support
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -540,7 +602,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-(autoload 'gfm-mode "gfm-mode"
+(autoload 'gfm-mode "markdown-mode"
    "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
@@ -678,6 +740,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
 
 (setq cperl-hairy t)
 
+(require 'ggtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
@@ -719,10 +782,7 @@ by typing \\[beginning-of-line] \\[delete-line]."
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Emacs 22+ - revert space completing filenames in minibuffer (see FAQ)
-
 (define-key minibuffer-local-filename-completion-map (kbd "SPC")
-  'minibuffer-complete-word)
-(define-key minibuffer-local-must-match-filename-map (kbd "SPC")
   'minibuffer-complete-word)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -754,54 +814,115 @@ by typing \\[beginning-of-line] \\[delete-line]."
  '(blink-matching-paren (quote jump))
  '(canlock-password "729dd1edbb7f5765107438e259df42fe65cf1dac")
  '(column-number-mode t)
+ '(compilation-message-face (quote default))
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#839496")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
  '(cursor-color "#839496")
  '(custom-enabled-themes (quote (cyberpunk)))
  '(custom-safe-themes
    (quote
-    ("e64111716b1c8c82638796667c2c03466fde37e69cada5f6b640c16f1f4e97df" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
- '(desktop-save-mode t)
+    ("38e64ea9b3a5e512ae9547063ee491c20bd717fe59d9c12219a0b1050b439cdd" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "e64111716b1c8c82638796667c2c03466fde37e69cada5f6b640c16f1f4e97df" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
  '(display-time-mode t)
- '(electric-pair-mode t)
  '(erc-server "haxan.lan")
  '(erc-user-full-name "\"What's up doc?\"")
  '(focus-follows-mouse t)
  '(font-use-system-font nil)
  '(foreground-color "#839496")
- '(global-magit-file-mode t)
- '(global-semantic-decoration-mode t)
- '(global-semantic-idle-summary-mode t)
  '(gnus-group-list-inactive-groups nil)
  '(gnus-treat-newsgroups-picon nil)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote cabal-repl))
- '(haskell-tags-on-save t)
+ '(haskell-process-auto-import-loaded-modules t t)
+ '(haskell-process-log t t)
+ '(haskell-process-suggest-remove-import-lines t t)
+ '(haskell-process-type (quote cabal-repl) t)
+ '(haskell-tags-on-save t t)
+ '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(highlight-symbol-colors
+   (--map
+    (solarized-color-blend it "#002b36" 0.25)
+    (quote
+     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+ '(highlight-symbol-foreground-color "#93a1a1")
+ '(highlight-tail-colors
+   (quote
+    (("#073642" . 0)
+     ("#546E00" . 20)
+     ("#00736F" . 30)
+     ("#00629D" . 50)
+     ("#7B6000" . 60)
+     ("#8B2C02" . 70)
+     ("#93115C" . 85)
+     ("#073642" . 100))))
+ '(hl-bg-colors
+   (quote
+    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+ '(hl-fg-colors
+   (quote
+    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+ '(ibuffer-elide-long-columns t)
+ '(ibuffer-eliding-string "&")
+ '(ibuffer-saved-filter-groups nil)
  '(indicate-empty-lines t)
+ '(magit-diff-use-overlays nil)
+ '(mouse-autoselect-window -1.5)
  '(mouse-yank-at-point t)
  '(notmuch-saved-searches
    (quote
     ((:name "inbox" :query "tag:inbox")
      (:name "unread" :query "tag:unread"))))
- '(package-archives
+ '(nrepl-message-colors
    (quote
-    (("gnu" . "https://elpa.gnu.org/packages/")
-     ("melpa-stable" . "http://stable.melpa.org/packages/"))))
- '(package-check-signature nil)
+    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (flymake-haskell-multi ghc ghc-imported-from haskell-tab-indent hindent w3m irfc tuareg header2 xkcd gh-md gist gitattributes-mode github-clone github-notifier github-search gitty yaml-mode js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme)))
+    (spacemacs-theme magithub markdown-mode paren-face paredit-menu twittering-mode better-defaults better-shell solarized-theme pkgbuild-mode paredit elisp-slime-nav flymake-haskell-multi ghc ghc-imported-from haskell-tab-indent hindent w3m irfc tuareg header2 xkcd gist gitattributes-mode github-clone github-notifier github-search gitty yaml-mode js2-mode htmlize erc-youtube erc-tweet erc-crypt eprime-mode discord cyberpunk-theme)))
+ '(pos-tip-background-color "#073642")
+ '(pos-tip-foreground-color "#93a1a1")
+ '(save-place-mode t)
  '(scroll-bar-mode (quote right))
- '(semantic-mode t)
  '(send-mail-function (quote sendmail-send-it))
+ '(show-paren-mode t)
  '(show-paren-ring-bell-on-mismatch t)
- '(show-paren-style (quote expression))
- '(show-paren-when-point-in-periphery t)
+ '(show-paren-style (quote mixed))
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
  '(starttls-extra-arguments nil)
+ '(term-default-bg-color "#002b36")
+ '(term-default-fg-color "#839496")
  '(tool-bar-mode nil)
+ '(vc-annotate-background nil)
+ '(vc-annotate-background-mode nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dc322f")
+     (40 . "#c85d17")
+     (60 . "#be730b")
+     (80 . "#b58900")
+     (100 . "#a58e00")
+     (120 . "#9d9100")
+     (140 . "#959300")
+     (160 . "#8d9600")
+     (180 . "#859900")
+     (200 . "#669b32")
+     (220 . "#579d4c")
+     (240 . "#489e65")
+     (260 . "#399f7e")
+     (280 . "#2aa198")
+     (300 . "#2898af")
+     (320 . "#2793ba")
+     (340 . "#268fc6")
+     (360 . "#268bd2"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   (quote
+    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83")))
  '(window-divider-default-places (quote right-only))
  '(window-divider-default-right-width 3)
- '(x-gtk-use-system-tooltips nil))
+ '(x-gtk-use-system-tooltips nil)
+ '(xterm-color-names
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
+ '(xterm-color-names-bright
+   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
 
 
 (custom-set-faces
@@ -810,7 +931,8 @@ by typing \\[beginning-of-line] \\[delete-line]."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#000000" :foreground "#d3d3d3" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "PfEd" :family "Inconsolata LGC"))))
- '(italic ((t (:slant italic :weight normal :height 98 :width normal :foundry "PfEd" :family "Inconsolata LGC")))))
+ '(italic ((t (:slant italic :weight normal :height 98 :width normal :foundry "PfEd" :family "Inconsolata LGC"))))
+ '(parenthesis ((t (:inherit shadow :foreground "gray45")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of custom section.
