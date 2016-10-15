@@ -3,12 +3,11 @@
 !
 ! Alt, Meta, Control, Super and HYPER!
 !
-! This sets caps-lock to HYPER, the left control key to CTRL (no change), 
-! left alt eqivalent to META and mod4 is SUPER (the windows key)
-! = the key I use in Xmonad as the modifier key.
-! This is a good setup for Emacs. Of course, there's no reason
-! why keycodes 37 and 66 can't be swapped - so HYPER is set to left
-! control and caps-lock becomes CTRL... like old Sun keyboards, etc.
+! This sets caps-lock to CTRL, the left control key to HYPER, 
+! left alt eqivalent to META, and mod4 to SUPER (the windows key)
+! which is the key I use in Xmonad as the modifier key.
+! This is a great setup for Emacs, giving sane defaults and with
+! an additional modifier key in HYPER.
 !
 
 clear      lock
@@ -18,8 +17,8 @@ clear      mod2
 clear      mod3
 clear      mod4
 clear      mod5
-keycode      37 = Control_L
-keycode      66 = Hyper_L
+keycode      37 = Hyper_L
+keycode      66 = Control_L
 add     control = Control_L Control_R
 add        mod1 = Alt_L Alt_R Meta_L
 add        mod2 = Num_Lock
