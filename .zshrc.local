@@ -1,4 +1,4 @@
-#
+# -*- mode: sh -*-
 # ~/.zshrc.local
 #
 export HISTFILE=~/.histfile
@@ -60,7 +60,7 @@ source ~/etc/zsh/antigen.zsh
 
 # useful function definitions
 
-manzsh()  { /usr/bin/man zshall |  most -c +/"$1" ; }
+manzsh()  { /usr/bin/man zshall | less -Jw -j.3  +/"$1" ; }
 
 d () 
 { 
@@ -72,11 +72,16 @@ d ()
     fi
 }
 
-# this uses links browser for quick lookups in the cli
+# these use the links browser for quick lookups in the cli
 gg () 
-{ 
+{
     SURFRAW_google_safe="off";
     /usr/lib/surfraw/google "$@" &> /dev/null
+}
+
+gg2 () 
+{
+    /usr/bin/googler --enable-browser-output "$@"
 }
 
 urxvtfont ()
@@ -103,6 +108,13 @@ plap() {
 
 alias fip='plap'
 
+# startx with logging
+xstart()
+{
+    local tty_num=$(tty | grep -oE '[0-9]+$')
+    startx -- -logverbose 7 vt$tty_num &>/tmp/xstart.log
+}
+
 # additional aliases
 
 alias ct='colortail -f '
@@ -110,9 +122,10 @@ alias ddf='pydf -h'
 alias df='df -h '
 alias diff='colordiff -u'
 alias du='du -h '
-alias e='emacsclient -nw -a jmacs '
+alias e='emacsclient -nw -a "" '
 alias em='emacsclient -c '
 alias grep='command grep --color=auto --directories=skip'
+alias gx='BROWSER="xlinks -g" googler '
 alias h='history -100'
 alias j='jmacs '
 alias lf='command ls -A  --color=auto'
@@ -127,5 +140,5 @@ alias mi='mediainfo'
 alias pacs='pacaur -Ss'
 alias paci='pacaur -Si'
 alias t='command less '
-alias ze='jmacs -syntax sh ~/.zshrc.local'
+alias ze='emacsclient -c ~/.zshrc.local'
 
