@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# the bug for which this file was a quick fix has apparently been fixed, see
+# https://bugzilla.redhat.com/show_bug.cgi?id=806491
+
 TTY=${TTY:-$(tty)}
 TTY=${TTY#/dev/}
 
