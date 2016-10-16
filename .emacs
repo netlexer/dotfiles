@@ -1,10 +1,12 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 ;;;
-;;; Time-stamp: <2016-10-15 23:30:21 neil>
+;;; Time-stamp: <2016-10-16 01:32:44 neil>
 ;;;
 ;;; Emacs configuration file by Neil Woods <neil@netlexer.uk>.
 ;;; Written originally for GNU Emacs (ver 19.x), with many
 ;;; ideas from usenet, emacswiki, etc.  
+;;; Now superceeded by ~/.emacs.d/init.el. 
+;;; =====================================
 ;;; (c) Neil Woods, 1992-2016.                                  
 
 ;; Announce start of file loading...
