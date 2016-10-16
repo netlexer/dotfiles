@@ -73,5 +73,6 @@ hdr_order Date From To Subject X-Mailer User-Agent Organization
 
 #source ~/.mutt/mutt-colors-arch.muttrc
 source ~/.mutt/mutt-colors-solarized-dark-16.muttrc
+#source ~/.mutt/mutt-colors-solarized-dark-256.muttrc
 
 
