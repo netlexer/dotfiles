@@ -16,10 +16,11 @@ set folder_format="%2C %t %8s %d %N %f"
 
 #set sendmail="/usr/bin/nbsmtp -d isp.net -h smtp.isp.net -f yourname@isp.net"
 
-set from="neil@netlexer.uk"         #set to your from address
+set from="neil@netlexer.uk"             #set to your from address
 set realname="Neil Woods"
 
-set record="$HOME/Mail/sent"        #sent mail is saved here
+set record="+.Sent"			#sent mail is saved here
+set postponed="+.Drafts"
 set delete=yes                          #delete without prompting
 set include=yes                         #quote msg in reply
 set fast_reply=yes                      #no prompting on reply
@@ -28,23 +29,48 @@ set markers=no                          #no + on wrapped lines
 set confirmappend=no                    #no prompt for save to =keep
 set to_chars=" +TCF"                    #no L for mail_list
 
-set folder = $HOME/Mail
-mailboxes =mbox
-mailboxes =bugreport
-mailboxes =bugreport-cdrkit
-mailboxes =arch-user
-mailboxes =arch-dev
-mailboxes =arch-announce
-mailboxes =duplicates
-mailboxes =default
-mailboxes =sent
-mailboxes =posted
-mailboxes =friends
-mailboxes =junk
-mailboxes =spam
-mailboxes =keep
+set mbox_type=Maildir
+set folder="~/Maildir/"
+set mask=".*"
 
-save-hook .* =keep                      #default mbox to (s)ave mail is =keep
+# mailboxes ! + `\
+#   for file in ~/Maildir/.*; do \
+#     box=$(basename "$file"); \
+#     if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \
+#         -a ! "$box" = '.subscriptions' ]; then \
+#       echo -n "\"+$box\" "; \
+#     fi; \
+#   done`
+
+mailboxes + `\
+  for file in ~/Maildir/.*; do \
+    box=$(basename "$file"); \
+    if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \
+           -a ! "$box" = '.subscriptions' ]; then \
+        echo -n "\"+$box\" "; \
+    fi; \
+  done; \
+  for folder in ~/Maildir/*; do \
+     if [ -x $folder ]; then \
+         box=$(basename "$folder"); \
+         for file in ~/Maildir/$box/.*; do \
+             box2=$(basename "$file"); \
+             if [ ! "$box2" = '.' -a ! "$box2" = '..' -a ! "$box2" = '.customflags' \
+                   -a ! "$box2" = '.subscriptions' ]; then \
+                   echo -n "\"+$box/$box2\" "; \
+             fi; \
+          done; \
+      fi; \
+  done`
+
+
+
+macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
+macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
+
+save-hook .* "+.Keep"                    #default mbox to (s)ave mail is =keep
 #subscribe gentoo-user gentoo-dev        #subscribed to these lists
 
 bind pager h display-toggle-weed        #toggle headers with h key
@@ -74,5 +100,3 @@ hdr_order Date From To Subject X-Mailer User-Agent Organization
 #source ~/.mutt/mutt-colors-arch.muttrc
 source ~/.mutt/mutt-colors-solarized-dark-16.muttrc
 #source ~/.mutt/mutt-colors-solarized-dark-256.muttrc
-
-
