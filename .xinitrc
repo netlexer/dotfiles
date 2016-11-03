@@ -44,11 +44,14 @@ export AWT_TOOLKIT=XToolkit
 ulimit -c unlimited
 
 # setup keymap modifiers for Emacs (with caps-lock -> HYPER modifier)
-xmodmap ~/.Xmodmap
+#xmodmap ~/.Xmodmap
 # Enable zapping (C-A-<Bksp> kills X)
-setxkbmap -option terminate:ctrl_alt_bksp
+setxkbmap -option terminate:ctrl_alt_bksp -option altwin:left_meta_win -option ctrl:nocaps
 
 xsetroot -cursor_name left_ptr
+
+# adjust display temperature daytime/nighttime
+#redshift &
 
 # Start window manager like this, e.g.:
 # % WM=awesome startx
@@ -83,6 +86,10 @@ case $WM in
 #	tray &
 	exec /usr/bin/xmonad 
 	;;
+    lxqt)
+    	logmsg
+    	exec /usr/bin/startlxqt
+    	;;		
     *)
 	logmsg
 	# could put xterm here...
