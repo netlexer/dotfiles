@@ -101,8 +101,8 @@ URxvt*color7  : #D3D7CF
 URxvt*color15 : #EEEEEC
 
 ! Emacs settings
-Emacs.background: black
-Emacs.foreground: white
+!Emacs.background: black
+!Emacs.foreground: white
 Emacs.menuBar: 1
 Emacs.toolBar: 0
 Emacs.verticalScrollBars: off
