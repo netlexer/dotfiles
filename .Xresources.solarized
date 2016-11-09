@@ -1,0 +1,116 @@
+!-------------------------------------------------------------------------------
+! Xft settings
+!-------------------------------------------------------------------------------
+
+Xft.dpi: 		    96
+Xft.antialias: 		    true
+Xft.hinting: 		    true
+Xft.rgba: 		    rgb
+Xft.autohint: 		    true
+Xft.hintstyle: 		    hintslight
+Xft.lcdfilter: 		    lcddefault
+
+!-------------------------------------------------------------------------------
+! URxvt settings
+! Colours taken from Solarized (http://ethanschoonover.com/solarized) theme.
+! More info at:
+! http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod
+!-------------------------------------------------------------------------------
+
+URxvt*buffered:		    true
+URxvt*cursorBlink:	    true
+!URxvt*underlineColor: 	    yellow
+URxvt*borderless:	    1
+Urxvt*secondaryScroll:      true
+URxvt.depth:                32
+URxvt.geometry:             80x40
+URxvt.transparent:          false
+URxvt*.shading:		    15
+!URxvt.fading:               0
+URxvt.urgentOnBell:         true
+URxvt.visualBell:           true
+URxvt.loginShell:           true
+URxvt.saveLines:            8192
+URxvt.mapAlert:             true
+URxvt.internalBorder:       3
+URxvt.lineSpace:            0
+
+! Fonts
+!URxvt.allow_bold:           true
+URxvt*font: 		    xft:Inconsolata:Regular:size=12, 9x15, xft:Code2000
+URxvt*boldFont: 	    xft:Inconsolata:Bold:size=12
+URxvt*italicFont: 	    xft:Liberation Mono:italic:size=10:autohint=true
+!URxvt*italicFont:	    xft:Inconsolata LGC:italic:size=10
+
+! Fix font space
+URxvt*letterSpace: -1
+
+! Scrollbar
+URxvt.scrollStyle:          plain
+URxvt.scrollBar:            false
+!URxvt.secondaryScroll:      true
+
+
+! Perl extensions
+!URxvt.perl-ext-common:      default,matcher,-selection
+!URxvt.matcher.button:       1
+!URxvt.urlLauncher:          firefox
+
+!URxvt.keysym.C-Delete:    matcher:last
+!URxvt.keysym.M-Delete:    matcher:list
+!URxvt.keysym.0xff67:      matcher:select
+
+! Cursor
+!URxvt.cursorBlink:          true
+URxvt.cursorColor:          #93a1a1
+URxvt.cursorUnderline:      false
+
+! Pointer
+URxvt.pointerBlank:         true
+*pointerColorBackground:    #586e75
+*pointerColorForeground:    #93a1a1
+
+
+!urxvt color scheme:
+
+URxvt*background: #002b36
+URxvt*foreground: #657b83
+
+URxvt*colorBD: #fdf6e3
+URxvt*colorUL: #86a2b0
+!URxvt*colorIT: #8AE234
+!URxvt.underlineColor:   yellow
+
+! black
+URxvt*color0  : #073642
+URxvt*color8  : #002b36
+! red
+URxvt*color1  : #dc322f
+URxvt*color9  : #cb4b16
+! green
+URxvt*color2  : #859900
+URxvt*color10 : #586e75
+! yellow
+URxvt*color3  : #b58900
+URxvt*color11 : #657b83
+! blue
+URxvt*color4  : #268bd2
+URxvt*color12 : #839496
+! magenta
+URxvt*color5  : #d33682
+URxvt*color13 : #6c71c4
+! cyan
+URxvt*color6  : #2aa198
+URxvt*color14 : #93a1a1
+! white
+URxvt*color7  : #eee8d5
+URxvt*color15 : #fdf6e3
+
+! Emacs settings
+!Emacs.background: black
+!Emacs.foreground: white
+Emacs.menuBar: 1
+Emacs.toolBar: 0
+Emacs.verticalScrollBars: off
+Emacs.FontBackend: xft
+!Emacs.font: Inconsolata LGC:size=12
