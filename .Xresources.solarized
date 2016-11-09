@@ -73,8 +73,11 @@ URxvt.pointerBlank:         true
 
 !urxvt color scheme:
 
-URxvt*background: #002b36
-URxvt*foreground: #657b83
+! these are the solarized defaults; I've increase the contrast slightly
+!URxvt*background: #002b36
+!URxvt*foreground: #657b83
+URxvt*background: #00232c
+URxvt*foreground: #7d939b
 
 URxvt*colorBD: #fdf6e3
 URxvt*colorUL: #86a2b0
