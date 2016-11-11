@@ -37,7 +37,7 @@ URxvt.lineSpace:            0
 
 ! Fonts
 !URxvt.allow_bold:           true
-URxvt*font: 		    xft:Inconsolata:Regular:size=12, 9x15, xft:Code2000
+URxvt*font: 		    xft:Inconsolata:Regular:size=12, xft:Code2000
 URxvt*boldFont: 	    xft:Inconsolata:Bold:size=12
 URxvt*italicFont: 	    xft:Liberation Mono:italic:size=10:autohint=true
 !URxvt*italicFont:	    xft:Inconsolata LGC:italic:size=10
@@ -73,7 +73,7 @@ URxvt.pointerBlank:         true
 
 !urxvt color scheme:
 
-! these are the solarized defaults; I've increase the contrast slightly
+! these are the solarized defaults; I increased the contrast slightly
 !URxvt*background: #002b36
 !URxvt*foreground: #657b83
 URxvt*background: #00232c

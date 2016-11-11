@@ -15,6 +15,7 @@ export HISTSIZE=2000
 export MAILDIR=~/Maildir/
 export SAVEHIST=2000
 export IRCNICK=daedalux
+export JEKYLL_GITHUB_TOKEN=`cat ~/.git_jekyll_token`
 export LC_COLLATE=C
 export LESS='-ceaisMRJwj.3'
 export LESSEDIT='emacsclient -c  ?lm+%lm. %f '

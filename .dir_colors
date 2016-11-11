@@ -320,8 +320,9 @@ EIGHTBIT 1
 .Xauthority     38;5;200
 .gpg-agent-info 01;31
 .Xmodmap        38;5;200
-.Xresources     38;5;200
-.xserverrc	38;5;200
+.Xresources		38;5;200
+.Xresources.solarized	38;5;200
+.xserverrc		38;5;200
 .emacs		38;5;191
 .gnus		38;5;191
 .el		38;5;214

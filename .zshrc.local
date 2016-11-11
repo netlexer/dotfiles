@@ -18,7 +18,7 @@ eval $(dircolors -b ~/.dir_colors)
 # The following lines were added by compinstall
 
 # zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle ':completion:*' completer _complete _ignored # _approximate
 zstyle ':completion:*' ignore-parents parent pwd directory
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' matcher-list ''
